@@ -1,0 +1,11 @@
+LeoparDX/src/app/enviroment.ts
+node_modules/
+dist/
+.firebase/
+.angular/
+.env
+npm-debug.log*
+*.log
+.DS_Store
+.vscode/
+coverage/
