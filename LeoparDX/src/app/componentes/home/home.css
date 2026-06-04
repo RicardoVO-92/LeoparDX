@@ -8,6 +8,33 @@
     background: linear-gradient(90deg, #C0006A 0%, #7B1FA2 50%, #2E3192 100%);
 }
 
+.fondoLogin {
+  background-image: url('/images/gimnasioImagen.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+}
+
+/* La máscara de color encima de la imagen */
+.fondoLogin::before {
+  content: '';
+  position: absolute;
+  inset: 0;  /* cubre todo */
+  background: linear-gradient(135deg, 
+    rgba(192, 0, 106, 0.6) 0%, 
+    rgba(123, 31, 162, 0.5) 50%, 
+    rgba(46, 49, 146, 0.6) 100%
+  );
+  z-index: 0;
+}
+
+/* Importante: el contenido debe estar por encima de la máscara */
+.fondoLogin > * {
+  position: relative;
+  z-index: 1;
+}
+
 .cardCentrada {
   display: flex;
   flex-direction: column;
@@ -17,6 +44,7 @@
   padding: 24px 12px;
   box-sizing: border-box;
   gap: 8px;
+  margin-top: 60px;  /* ← esto baja la card */
 }
 
 .cardCentrada label {
@@ -42,8 +70,72 @@
     color: white;
 }
 
-body {
-  margin: 0;
-  padding: 0;
+
+/* diseño inputs */
+/* Caja transparente tipo "glass" que envuelve el formulario */
+.glassCard {
+  display: flex;           /* ← faltaba esto */
+  flex-direction: column;  /* ← y esto */
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  gap: 16px;
+  border-radius: 16px;
+  padding: 32px 24px;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos de los inputs */
+.inputUNE {
+  width: 100%;
+  max-width: 400px;
+  padding: 12px 16px;
   box-sizing: border-box;
+  border: 1.5px solid rgba(192, 0, 106, 0.4);   /* magenta suave */
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.6);
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 14px;
+  color: #1a1a1a;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.inputUNE:focus {
+  border-color: #C0006A;   /* magenta fuerte al hacer click */
+  background: rgba(255, 255, 255, 0.85);
+}
+
+/* Labels */
+.labelUNE {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #2E3192;
+  align-self: flex-start;
+  margin-left: calc(50% - 200px);
+}
+
+/* Botón */
+.btnUNE {
+  padding: 10px 32px;
+  background: linear-gradient(90deg, #C0006A, #2E3192);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  max-width: 160px;
+}
+
+.btnUNE:hover {
+  opacity: 0.85;
 }

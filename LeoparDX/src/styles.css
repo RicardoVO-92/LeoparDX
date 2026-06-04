@@ -1,1 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Fondo del body con imagen (cambia la url por tu imagen) */
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* background-image: url(); */ 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+}
