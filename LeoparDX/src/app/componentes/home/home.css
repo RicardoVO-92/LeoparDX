@@ -1,0 +1,49 @@
+.loginCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 120px;
+    width: 100%;
+    background: linear-gradient(90deg, #C0006A 0%, #7B1FA2 50%, #2E3192 100%);
+}
+
+.cardCentrada {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;  /* centra horizontal */
+  align-items: center;      /* centra vertical */
+  width: 100%;
+  padding: 24px 12px;
+  box-sizing: border-box;
+  gap: 8px;
+}
+
+.cardCentrada label {
+  align-self: flex-start;
+  margin-left: calc(50% - 200px);
+}
+
+.cardCentrada input {
+  width: 100%;
+  max-width: 400px;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.cardCentrada button {
+  padding: 8px 16px;
+  max-width: 120px;
+}
+
+.fontCardTitulos {
+    font-family: 'Nunito Sans', sans-serif;
+    text-transform: uppercase;
+    color: white;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}

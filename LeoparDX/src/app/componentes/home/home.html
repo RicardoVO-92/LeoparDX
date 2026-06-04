@@ -1,0 +1,20 @@
+
+<!-- Formulario visible cuando NO está logueado -->
+<div *ngIf="!isLoggedIn">
+    <div class="loginCard fontCardTitulos"> <h1>Login</h1> </div>
+    <div style="height: 80px;"></div>
+    <div class="cardCentrada">
+            <label for="email">Usuario</label>
+            <input type="email" id="email" name="email" placeholder="Usuario" [(ngModel)]="user.userEmail">
+            <br>
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" name="password" placeholder="Constraseña" [(ngModel)]="user.password">
+
+            <button type="button" (click)="loginGYM()">Entrar</button>
+    </div>
+</div>
+
+<!-- Si se hizo login se quita esto: -->
+<div *ngIf="isLoggedIn">
+    <!--Contenido en blanco tras login-->
+</div>
