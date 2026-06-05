@@ -2,13 +2,14 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms'
 import { CommonModule } from '@angular/common';
 import { collection, collectionData, Firestore, query, where, limit } from '@angular/fire/firestore';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'login',
   standalone: true,
   imports: [FormsModule, CommonModule],
-  templateUrl: './home.html',
-  styleUrls: ['./home.css']
+  templateUrl: './login.html',
+  styleUrls: ['./login.css']
 })
 
 export class LoginComponent {
@@ -17,7 +18,11 @@ export class LoginComponent {
 
   user: Login = new Login();
   // Estado simple para mostrar/ocultar el formulario
-  isLoggedIn: boolean = false;
+  
+
+  constructor(public ruta: Router) {
+    
+  }
   
 
   loginGYM() {
@@ -33,13 +38,14 @@ export class LoginComponent {
       if (data && data.length > 0) {
 
         const item = data[0];
-
+    
         //Checar que sea login
         if (item.password === this.user.password) {
           //Si se hizo login se quita esto:
-          this.isLoggedIn = true;
+        
           this.user.nombreAlumno = item.nombreAlumno;
           console.log('Login successful!');
+          this.ruta.navigate(['/Dashboard']);
         } else {
           //console.warn('Invalid email or password.');
         }
@@ -52,7 +58,6 @@ export class LoginComponent {
     });
   }
 
-  
 }
 
 export class Login {

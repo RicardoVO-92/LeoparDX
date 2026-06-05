@@ -1,5 +1,4 @@
-<!-- Formulario visible cuando NO está logueado -->
-<div *ngIf="!isLoggedIn"  class="fondoLogin">
+<div class="fondoLogin">
 
   <div class="loginCard fontCardTitulos">
     <h1>Login</h1>
@@ -23,7 +22,3 @@
 
 </div>
 
-<!-- Si se hizo login se quita lo de arriba -->
-<div *ngIf="isLoggedIn">
-  <p>Bienvenido, {{user.nombreAlumno}}!</p>
-</div>
