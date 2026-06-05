@@ -61,4 +61,6 @@ export class Login {
   password: string = "";
   userEmail: string = "";
   admin: boolean = false;
+  entrenador: boolean = false;
 }
+
