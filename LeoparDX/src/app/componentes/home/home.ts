@@ -21,17 +21,24 @@ export class LoginComponent {
   
 
   loginGYM() {
+
     console.log('loginGYM clicked', this.user);
+
     const usersCollection = collection(this.firestore, 'Usuarios');
+
     const q = query(usersCollection, where('userEmail', '==', this.user.userEmail), limit(1));
 
     collectionData(q).subscribe((data: any[]) => {
+
       if (data && data.length > 0) {
+
         const item = data[0];
+
         //Checar que sea login
         if (item.password === this.user.password) {
           //Si se hizo login se quita esto:
           this.isLoggedIn = true;
+          this.user.nombreAlumno = item.nombreAlumno;
           console.log('Login successful!');
         } else {
           //console.warn('Invalid email or password.');
@@ -50,6 +57,7 @@ export class LoginComponent {
 
 export class Login {
   userID: string = "";
+  nombreAlumno: string = "";
   password: string = "";
   userEmail: string = "";
   admin: boolean = false;
