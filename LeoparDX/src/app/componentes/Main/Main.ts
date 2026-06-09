@@ -5,16 +5,17 @@ import { collection, collectionData, Firestore, query, where, limit } from '@ang
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'inicio',
+  selector: 'Main',
   standalone: true,
   imports: [FormsModule, CommonModule],
-  templateUrl: './init.html',
-  styleUrls: ['./init.css']
+  templateUrl: './Main.html',
+  styleUrls: ['./Main.css']
 })
 
-export class componentInicio{
-    
+export class ComponentMain {
+
   constructor(public ruta: Router) {
-    ruta.navigate(['/Home']);
+    
   }
+
 }
