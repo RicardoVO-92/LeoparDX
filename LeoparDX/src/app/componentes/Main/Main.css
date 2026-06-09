@@ -1,0 +1,72 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.navCard {
+  display: flex;
+  align-items: center;
+  height: 60px;
+  width: 100%;
+  background: linear-gradient(90deg, #C0006A 0%, #7B1FA2 50%, #2E3192 100%);
+  padding: 0 30px;  /* Espacio entre DIVs en los lados */
+}
+
+.navBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;  /* ← ocupa todo el ancho disponible */
+}
+
+.fontNav {
+    font-family: 'Roboto', sans-serif;
+    font-size: 17px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.navBar a:hover {
+  transform: scale(1.05);        /* un poco más grande */
+  font-weight: 700;              /* bold */
+  cursor: pointer;               
+  transition: transform 0.2s;   /* animación suave */
+}
+
+.navBar a {
+  text-decoration: none;  /* quita el subrayado */
+  color: inherit;         /* hereda el color del padre */
+}
+
+.fondoLogin {
+  height: 100%;
+  width: 100%;
+  position: relative; /* para posicionar la máscara */
+  background-image: url('/images/gymUne.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+}
+
+/* La máscara de color encima de la imagen */
+.fondoLogin::before {
+  content: '';
+  position: absolute;
+  inset: 0;  /* cubre todo */
+  background: linear-gradient(135deg, 
+    rgba(192, 0, 106, 0.6) 0%, 
+    rgba(123, 31, 162, 0.5) 50%, 
+    rgba(46, 49, 146, 0.6) 100%
+  );
+  z-index: 0;
+}
+
+/* Importante: el contenido debe estar por encima de la máscara */
+.fondoLogin > * {
+  position: relative;
+  z-index: 1;
+}
