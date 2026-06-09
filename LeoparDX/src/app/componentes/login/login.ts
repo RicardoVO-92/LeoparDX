@@ -3,6 +3,9 @@ import { FormsModule } from '@angular/forms'
 import { CommonModule } from '@angular/common';
 import { collection, collectionData, Firestore, query, where, limit } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+import { Usuario } from '../../models/usuario.model';
+
+
 
 @Component({
   selector: 'login',
@@ -16,7 +19,7 @@ export class LoginComponent {
 
   private firestore: Firestore = inject(Firestore);
 
-  user: Login = new Login();
+  user: Usuario = new Usuario();
   // Estado simple para mostrar/ocultar el formulario
   
 
@@ -31,7 +34,7 @@ export class LoginComponent {
 
     const usersCollection = collection(this.firestore, 'Usuarios');
 
-    const q = query(usersCollection, where('userEmail', '==', this.user.userEmail), limit(1));
+    const q = query(usersCollection, where('email', '==', this.user.email), limit(1));
 
     collectionData(q).subscribe((data: any[]) => {
 
@@ -40,11 +43,10 @@ export class LoginComponent {
         const item = data[0];
     
         //Checar que sea login
-        if (item.password === this.user.password) {
-          //Si se hizo login se quita esto:
+        if (item.password === this.user.password) {  
+          // Guarda el usuario en localStorage
+          localStorage.setItem('usuario', JSON.stringify(item));
         
-          this.user.nombreAlumno = item.nombreAlumno;
-          console.log('Login successful!');
           this.ruta.navigate(['/Dashboard']);
         } else {
           //console.warn('Invalid email or password.');
@@ -60,12 +62,4 @@ export class LoginComponent {
 
 }
 
-export class Login {
-  userID: string = "";
-  nombreAlumno: string = "";
-  password: string = "";
-  userEmail: string = "";
-  admin: boolean = false;
-  entrenador: boolean = false;
-}
 

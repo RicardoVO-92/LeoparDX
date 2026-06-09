@@ -6,6 +6,8 @@ export class Usuario {
   uid: string = '';
   nombre: string = '';
   apellido: string = '';
+  nombreUsuario: string = '';
+  password: string = '';
   email: string = '';
   telefono: string = '';
   rol: 'entrenador' | 'alumno' = 'alumno';
