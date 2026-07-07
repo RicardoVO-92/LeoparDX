@@ -1,0 +1,144 @@
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ============================================
+   SIDEBAR — la barra lateral oscura
+   ============================================ */
+.sidebar {
+  width: 220px;              /* 👉 ANCHO de la barra: sube o baja este número */
+  flex-shrink: 0;
+  background: #2E3192;       /* 👉 COLOR de fondo de la barra */
+  color: white;               /* 👉 COLOR del texto general adentro */
+  padding: 20px 16px;         /* 👉 ESPACIO interno: (arriba/abajo) (izq/der) */
+  box-sizing: border-box;
+}
+
+.sidebar__brand {
+  margin-bottom: 24px;        /* 👉 SEPARACIÓN entre "UNE GYM" y los links */
+}
+
+.sidebar__logo {
+  font-weight: 600;
+  font-size: 18px;            /* 👉 TAMAÑO del texto "UNE GYM" */
+  margin: 0;
+}
+
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;                   /* 👉 SEPARACIÓN entre cada link (Inicio, Ejercicios...) */
+}
+
+.sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: 10px;                  /* 👉 SEPARACIÓN entre el icono y el texto del link */
+  color: #d1d5db;              /* 👉 COLOR del texto de cada link cuando NO está activo */
+  text-decoration: none;
+  font-size: 14px;             /* 👉 TAMAÑO del texto de los links */
+  padding: 10px 12px;          /* 👉 TAMAÑO del "botón" de cada link (más padding = más grande) */
+  border-radius: 8px;          /* 👉 QUÉ TAN redondeadas las esquinas del link */
+  transition: background 0.2s, color 0.2s;
+}
+
+.sidebar__link:hover,
+.sidebar__link.active {
+  background: #374151;         /* 👉 COLOR de fondo cuando pasas el mouse o está activo */
+  color: white;                /* 👉 COLOR del texto cuando pasas el mouse o está activo */
+}
+
+/* ============================================
+   CONTENIDO — todo lo que no es sidebar
+   ============================================ */
+.dashboard-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* ============================================
+   TOPBAR — la barra de arriba con "Bienvenido"
+   ============================================ */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;          /* 👉 QUÉ TAN ALTA/ANCHA se ve la barra de arriba */
+  border-bottom: 1px solid #e5e7eb;  /* 👉 COLOR de la línea divisoria de abajo */
+  background: white;            /* 👉 COLOR de fondo de la topbar */
+}
+
+.topbar__title {
+  font-size: 18px;             /* 👉 TAMAÑO del texto "Bienvenido, lopez" */
+  font-weight: 500;
+  margin: 0;
+}
+
+.topbar__hamburger {
+  display: none;               /* oculto en desktop, no lo toques aquí */
+  background: none;
+  border: none;
+  font-size: 22px;             /* 👉 TAMAÑO del icono de hamburguesa */
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* ============================================
+   MAIN / CARDS — el área de las tarjetas
+   ============================================ */
+.dashboard-main {
+  padding: 24px;                /* 👉 ESPACIO alrededor de todas las cards */
+  display: flex;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;                    /* 👉 SEPARACIÓN entre una card y otra */
+}
+
+.card {
+  background: white;             /* 👉 COLOR de fondo de cada card */
+  border: 1px solid #e5e7eb;     /* 👉 COLOR del borde de cada card */
+  border-radius: 12px;           /* 👉 QUÉ TAN redondeadas las esquinas de la card */
+  padding: 16px;                 /* 👉 ESPACIO interno de la card (más = se ve más "aireada") */
+}
+
+.card__title {
+  font-size: 16px;               /* 👉 TAMAÑO del título de cada card (ej. "Ejercicios") */
+  font-weight: 500;
+  margin: 0 0 12px;
+}
+
+.card__body {
+  font-size: 14px;               /* 👉 TAMAÑO del texto normal dentro de la card */
+  color: #6b7280;                /* 👉 COLOR del texto normal dentro de la card */
+}
+
+/* ============================================
+   RESPONSIVE (móvil) — no lo toques a menos
+   que quieras cambiar el punto donde colapsa
+   ============================================ */
+@media (max-width: 768px) {     /* 👉 A partir de qué ancho se activa el modo móvil */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 20;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+  }
+
+  .sidebar.sidebar--open {
+    transform: translateX(0);
+  }
+
+  .topbar__hamburger {
+    display: block;
+  }
+
+  .dashboard-main {
+    grid-template-columns: 1fr;   /* 👉 en móvil, 1 sola columna de cards */
+    padding: 16px;
+  }
+}
