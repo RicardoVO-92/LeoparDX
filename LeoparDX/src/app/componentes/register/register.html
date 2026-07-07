@@ -1,0 +1,53 @@
+<div class="fondoLogin">
+    <div class="register-container">
+
+        <a>REGISTRATE</a>
+
+        <form (ngSubmit)="registrarUsuario()" method="POST">
+
+            <div class="input-group">
+                <input type="text" placeholder="Nombre" name="nombre" [(ngModel)]="nuevoUsuario.nombre">
+            </div>
+
+            <div class="input-group">
+                <input type="text" placeholder="Apellido" name="apellido" [(ngModel)]="nuevoUsuario.apellido">
+            </div>
+
+            <div class="input-group">
+                <input type="text" placeholder="Nombre de Usuario" name="username" [(ngModel)]="nuevoUsuario.nombreUsuario">
+            </div>
+
+            <div class="input-group">
+                <input type="email" placeholder="Email" name="email" [(ngModel)]="nuevoUsuario.email">
+            </div>
+
+            <div class="input-group">
+                <input type="password" 
+                       placeholder="Contraseña" 
+                       name="contraseña" 
+                       [(ngModel)]="contrasena"
+                       (input)="verificarcontrasena()">
+            </div>
+
+            <div class="input-group" 
+                 [class.is-valid]="contrasena && confirmarContrasena && coincidirContrasena"
+                 [class.is-invalid]="contrasena && confirmarContrasena && !coincidirContrasena">
+                
+                <input type="password" 
+                       placeholder="Confirmar Contraseña" 
+                       name="confirmarcontraseña" 
+                       [(ngModel)]="confirmarContrasena"
+                       (input)="verificarcontrasena()">
+
+                <span class="status-icon" *ngIf="contrasena && confirmarContrasena">
+                    {{ coincidirContrasena ? '✓' : '✗' }}
+                </span>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn-register">REGISTRAR</button>
+                <button type="button" class="btn-cancel" (click)="regresarMain()">CANCELAR</button>
+            </div>
+        </form>
+    </div>
+</div>

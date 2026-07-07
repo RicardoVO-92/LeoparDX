@@ -1,0 +1,131 @@
+.fondoLogin {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  background-image: url('/images/gymUne.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fondoLogin::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, 
+    rgba(192, 0, 106, 0.6) 0%, 
+    rgba(123, 31, 162, 0.5) 50%, 
+    rgba(46, 49, 146, 0.6) 100%
+  );
+  z-index: 0;
+}
+
+/* El color translúcido exacto que querías mantener */
+.register-container {
+    background-color: rgba(233, 30, 99, 0.3); 
+    backdrop-filter: blur(8px); 
+    width: 100%;
+    max-width: 400px;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    text-align: center;
+    position: relative;
+    z-index: 1; 
+}
+
+.register-container a {
+    display: block;
+    color: #4a154b;
+    font-size: 24px;
+    letter-spacing: 1.5px;
+    margin-bottom: 30px;
+    margin-top: 10px;
+    font-weight: 600;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 14px 20px;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    background-color: #536478;
+    color: #ffffff;
+    font-size: 16px;
+    box-sizing: border-box;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.input-group input::placeholder {
+    color: #e2e8f0;
+    opacity: 0.9;
+}
+
+.input-group input:focus {
+    background-color: #414f60;
+}
+
+/* --- Estados de comparación de contraseñas (Palomita o Tache) --- */
+.input-group.is-valid input {
+    border-color: #2ecc71 !important; /* Borde verde si coinciden */
+}
+
+.input-group.is-invalid input {
+    border-color: #e74c3c !important; /* Borde rojo si no coinciden */
+}
+
+.status-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: bold;
+    font-size: 18px;
+    pointer-events: none;
+}
+.input-group.is-valid .status-icon { color: #2ecc71; }
+.input-group.is-invalid .status-icon { color: #e74c3c; }
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.button-group button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #4a5a6a;
+    color: white;
+}
+
+.button-group button:hover {
+    background-color: #374654;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.button-group button:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
