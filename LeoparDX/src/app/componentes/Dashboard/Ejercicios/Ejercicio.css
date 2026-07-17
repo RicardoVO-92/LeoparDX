@@ -49,6 +49,12 @@
   resize: vertical;
 }
 
+.formulario__titulo {
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0;
+}
+
 .formulario__acciones {
   display: flex;
   gap: 10px;
@@ -86,6 +92,12 @@
 
 .tabla {
   overflow-x: auto;
+}
+
+.ejercicios__editar {
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
 }
 
 .tabla table {

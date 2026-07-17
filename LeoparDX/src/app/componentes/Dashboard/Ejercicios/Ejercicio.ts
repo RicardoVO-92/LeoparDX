@@ -18,8 +18,10 @@ export class EjercicioComponent implements OnDestroy {
 
   ejercicios: CatalogoEjercicio[] = [];
   nuevoEjercicio: CatalogoEjercicio = new CatalogoEjercicio();
+  ejercicioEditando: CatalogoEjercicio = new CatalogoEjercicio();
   cargando: boolean = false;
   guardando: boolean = false;
+  editandoEjercicio: boolean = false;
 
   gruposMusculares: CatalogoEjercicio['grupoMuscular'][] = ['pecho', 'espalda', 'pierna', 'hombro', 'brazo', 'abdomen', 'cardio'];
   equipamientos: CatalogoEjercicio['equipamiento'][] = ['barra', 'mancuernas', 'maquina', 'sin equipo', 'banda', 'polea'];
@@ -110,6 +112,47 @@ export class EjercicioComponent implements OnDestroy {
       console.log('Error al eliminar ejercicio', error);
       alert('Hubo un error al eliminar el ejercicio');
     }
+  }
+
+  editarEjercicio(ejercicio: CatalogoEjercicio) {
+    this.editandoEjercicio = true;
+    this.ejercicioEditando = Object.assign(new CatalogoEjercicio(), ejercicio);
+  }
+
+  async actualizarEjercicio() {
+    if (!this.ejercicioEditando.id) {
+      return;
+    }
+
+    if (!this.ejercicioEditando.nombre || !this.ejercicioEditando.descripcion) {
+      alert('El nombre y la descripcion son obligatorios');
+      return;
+    }
+
+    try {
+      const ejercicioDoc = doc(this.firestore, 'Catalogo_ejercicios', this.ejercicioEditando.id);
+
+      await updateDoc(ejercicioDoc, {
+        nombre: this.ejercicioEditando.nombre,
+        descripcion: this.ejercicioEditando.descripcion,
+        grupoMuscular: this.ejercicioEditando.grupoMuscular,
+        equipamiento: this.ejercicioEditando.equipamiento,
+        dificultad: this.ejercicioEditando.dificultad,
+        videoUrl: this.ejercicioEditando.videoUrl,
+        imagenUrl: this.ejercicioEditando.imagenUrl
+      });
+
+      alert('Ejercicio actualizado con exito');
+      this.cancelarEdicion();
+    } catch (error) {
+      console.log('Error al actualizar ejercicio', error);
+      alert('Hubo un error al actualizar el ejercicio');
+    }
+  }
+
+  cancelarEdicion() {
+    this.editandoEjercicio = false;
+    this.ejercicioEditando = new CatalogoEjercicio();
   }
 
   limpiarFormulario() {

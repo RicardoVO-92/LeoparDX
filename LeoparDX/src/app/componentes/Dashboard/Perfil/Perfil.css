@@ -1,0 +1,110 @@
+.perfil {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.perfil__card {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.perfil__encabezado {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.perfil__datos {
+  display: grid;
+  gap: 8px;
+}
+
+.perfil__datos p,
+.perfil__sin-datos p,
+.perfil__mensaje {
+  color: #4b5563;
+  font-size: 14px;
+  margin: 0;
+}
+
+.perfil__sin-datos {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.formulario__fila {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.formulario__campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.formulario__campo label {
+  color: #374151;
+  font-size: 14px;
+}
+
+.formulario__campo input,
+.formulario__campo textarea {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 14px;
+  padding: 10px;
+  width: 100%;
+}
+
+.formulario__campo textarea {
+  resize: vertical;
+}
+
+.formulario__acciones {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.btn {
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 10px 14px;
+}
+
+.btn--principal {
+  background: #2E3192;
+  color: white;
+}
+
+.btn--secundario {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+@media (max-width: 768px) {
+  .perfil__encabezado,
+  .formulario__acciones {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .formulario__fila {
+    grid-template-columns: 1fr;
+  }
+}

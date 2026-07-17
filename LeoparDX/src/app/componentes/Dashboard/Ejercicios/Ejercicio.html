@@ -60,6 +60,60 @@
   <div class="card ejercicios__tabla">
     <h2 class="card__title">Ejercicios registrados</h2>
 
+    <form class="formulario ejercicios__editar" *ngIf="editandoEjercicio" (ngSubmit)="actualizarEjercicio()">
+      <h3 class="formulario__titulo">Editar ejercicio</h3>
+
+      <div class="formulario__campo">
+        <label for="editarNombre">Nombre</label>
+        <input id="editarNombre" name="editarNombre" type="text" [(ngModel)]="ejercicioEditando.nombre">
+      </div>
+
+      <div class="formulario__campo">
+        <label for="editarDescripcion">Descripcion</label>
+        <textarea id="editarDescripcion" name="editarDescripcion" rows="3" [(ngModel)]="ejercicioEditando.descripcion"></textarea>
+      </div>
+
+      <div class="formulario__fila">
+        <div class="formulario__campo">
+          <label for="editarGrupoMuscular">Grupo muscular</label>
+          <select id="editarGrupoMuscular" name="editarGrupoMuscular" [(ngModel)]="ejercicioEditando.grupoMuscular">
+            <option *ngFor="let grupo of gruposMusculares" [value]="grupo">{{ grupo }}</option>
+          </select>
+        </div>
+
+        <div class="formulario__campo">
+          <label for="editarEquipamiento">Equipamiento</label>
+          <select id="editarEquipamiento" name="editarEquipamiento" [(ngModel)]="ejercicioEditando.equipamiento">
+            <option *ngFor="let equipo of equipamientos" [value]="equipo">{{ equipo }}</option>
+          </select>
+        </div>
+
+        <div class="formulario__campo">
+          <label for="editarDificultad">Dificultad</label>
+          <select id="editarDificultad" name="editarDificultad" [(ngModel)]="ejercicioEditando.dificultad">
+            <option *ngFor="let dificultad of dificultades" [value]="dificultad">{{ dificultad }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="formulario__fila">
+        <div class="formulario__campo">
+          <label for="editarVideoUrl">Video URL</label>
+          <input id="editarVideoUrl" name="editarVideoUrl" type="text" [(ngModel)]="ejercicioEditando.videoUrl">
+        </div>
+
+        <div class="formulario__campo">
+          <label for="editarImagenUrl">Imagen URL</label>
+          <input id="editarImagenUrl" name="editarImagenUrl" type="text" [(ngModel)]="ejercicioEditando.imagenUrl">
+        </div>
+      </div>
+
+      <div class="formulario__acciones">
+        <button class="btn btn--secundario" type="button" (click)="cancelarEdicion()">Cancelar</button>
+        <button class="btn btn--principal" type="submit">Actualizar</button>
+      </div>
+    </form>
+
     <p class="tabla__mensaje" *ngIf="cargando">Cargando ejercicios...</p>
     <p class="tabla__mensaje" *ngIf="!cargando && ejercicios.length === 0">No hay ejercicios registrados.</p>
 
@@ -83,6 +137,9 @@
             <td>{{ ejercicio.dificultad }}</td>
             <td>{{ ejercicio.descripcion }}</td>
             <td>
+              <button class="btn btn--secundario" type="button" (click)="editarEjercicio(ejercicio)">
+                Editar
+              </button>
               <button class="btn btn--eliminar" type="button" (click)="eliminarEjercicio(ejercicio)">
                 Eliminar
               </button>

@@ -1,3 +1,106 @@
-<div class="card">
-  <p>Bienvenido, Esta sección esta en construcción Perfil 🛠️🛠️</p>
+<div class="perfil">
+  <div class="card perfil__card">
+    <div class="perfil__encabezado">
+      <h2 class="card__title">Mi perfil</h2>
+      <button class="btn btn--principal" type="button" *ngIf="!editandoUsuario" (click)="editandoUsuario = true">
+        Editar
+      </button>
+    </div>
+
+    <p class="perfil__mensaje" *ngIf="cargandoUsuario">Cargando perfil...</p>
+
+    <div class="perfil__datos" *ngIf="!cargandoUsuario && !editandoUsuario">
+      <p><strong>Nombre:</strong> {{ usuario.nombre }}</p>
+      <p><strong>Apellido:</strong> {{ usuario.apellido }}</p>
+      <p><strong>Usuario:</strong> {{ usuario.nombreUsuario }}</p>
+      <p><strong>Email:</strong> {{ usuario.email }}</p>
+    </div>
+
+    <form class="formulario" *ngIf="editandoUsuario" (ngSubmit)="guardarUsuario()">
+      <div class="formulario__fila">
+        <div class="formulario__campo">
+          <label for="nombre">Nombre</label>
+          <input id="nombre" name="nombre" type="text" [(ngModel)]="usuario.nombre">
+        </div>
+
+        <div class="formulario__campo">
+          <label for="apellido">Apellido</label>
+          <input id="apellido" name="apellido" type="text" [(ngModel)]="usuario.apellido">
+        </div>
+      </div>
+
+      <div class="formulario__fila">
+        <div class="formulario__campo">
+          <label for="nombreUsuario">Usuario</label>
+          <input id="nombreUsuario" name="nombreUsuario" type="text" [(ngModel)]="usuario.nombreUsuario">
+        </div>
+
+        <div class="formulario__campo">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" [(ngModel)]="usuario.email">
+        </div>
+      </div>
+
+      <div class="formulario__acciones">
+        <button class="btn btn--secundario" type="button" (click)="cancelarEdicionUsuario()">Cancelar</button>
+        <button class="btn btn--principal" type="submit">Guardar</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card perfil__card">
+    <div class="perfil__encabezado">
+      <h2 class="card__title">Perfil fisico</h2>
+      <button class="btn btn--principal" type="button" *ngIf="tienePerfilFisico && !editandoPerfilFisico" (click)="editandoPerfilFisico = true">
+        Editar
+      </button>
+    </div>
+
+    <p class="perfil__mensaje" *ngIf="cargandoPerfilFisico">Cargando perfil fisico...</p>
+
+    <div class="perfil__sin-datos" *ngIf="!cargandoPerfilFisico && !tienePerfilFisico && !registrandoPerfilFisico">
+      <p>No tienes un perfil fisico registrado.</p>
+      <button class="btn btn--principal" type="button" (click)="mostrarFormularioPerfilFisico()">
+        Registrar perfil fisico
+      </button>
+    </div>
+
+    <div class="perfil__datos" *ngIf="!cargandoPerfilFisico && tienePerfilFisico && !editandoPerfilFisico">
+      <p><strong>Peso:</strong> {{ perfilFisico.peso }}</p>
+      <p><strong>Altura:</strong> {{ perfilFisico.altura }}</p>
+      <p><strong>Objetivo:</strong> {{ perfilFisico.objetivo }}</p>
+      <p><strong>Nivel de actividad:</strong> {{ perfilFisico.nivelActividad }}</p>
+    </div>
+
+    <form class="formulario" *ngIf="editandoPerfilFisico" (ngSubmit)="guardarPerfilFisico()">
+      <div class="formulario__fila">
+        <div class="formulario__campo">
+          <label for="peso">Peso</label>
+          <input id="peso" name="peso" type="number" [(ngModel)]="perfilFisico.peso">
+        </div>
+
+        <div class="formulario__campo">
+          <label for="altura">Altura</label>
+          <input id="altura" name="altura" type="number" [(ngModel)]="perfilFisico.altura">
+        </div>
+      </div>
+
+      <div class="formulario__fila">
+        <div class="formulario__campo">
+          <label for="objetivo">Objetivo</label>
+          <input id="objetivo" name="objetivo" type="text" [(ngModel)]="perfilFisico.objetivo">
+        </div>
+
+        <div class="formulario__campo">
+          <label for="nivelActividad">Nivel de actividad</label>
+          <input id="nivelActividad" name="nivelActividad" type="text" [(ngModel)]="perfilFisico.nivelActividad">
+        </div>
+      </div>
+
+      <div class="formulario__acciones">
+        <button class="btn btn--secundario" type="button" (click)="cancelarEdicionPerfilFisico()">Cancelar</button>
+        <button class="btn btn--principal" type="submit">Guardar</button>
+      </div>
+    </form>
+  </div>
 </div>
