@@ -26,6 +26,9 @@ export class LoginComponent {
   constructor(public ruta: Router) {
     
   }
+    irRegistrar(){
+    this.ruta.navigate(['/Register']);
+  }
   
 
   loginGYM() {

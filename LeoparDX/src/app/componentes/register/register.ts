@@ -13,7 +13,6 @@ import { Router } from '@angular/router';
 })
 
 export class registerComponent {
-  contrasena = '';
   confirmarContrasena = '';
   coincidirContrasena = false;
   nuevoUsuario: Usuarios = new Usuarios();
@@ -23,12 +22,12 @@ export class registerComponent {
   constructor(public router: Router){}
 
   regresarMain(){
-    this.router.navigate(['/Home']);
+    this.router.navigate(['/Login']);
   }
 
   verificarcontrasena() {
-    if (this.contrasena && this.confirmarContrasena) {
-      this.coincidirContrasena = this.contrasena === this.confirmarContrasena;
+    if (this.nuevoUsuario.password && this.confirmarContrasena) {
+      this.coincidirContrasena = this.nuevoUsuario.password === this.confirmarContrasena;
     } else {
       this.coincidirContrasena = false;
     }
