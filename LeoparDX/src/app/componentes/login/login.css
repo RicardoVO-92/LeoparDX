@@ -139,3 +139,23 @@
 .btnUNE:hover {
   opacity: 0.85;
 }
+
+.btnUNE1 {
+  align-self: center;
+  padding: 10px 32px;
+  background: linear-gradient(90deg, #C0006A, #2E3192);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  max-width: 160px;
+}
+
+.btnUNE1:hover {
+  opacity: 0.85;
+}

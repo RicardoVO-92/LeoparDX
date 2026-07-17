@@ -25,13 +25,13 @@
                 <input type="password" 
                        placeholder="Contraseña" 
                        name="contraseña" 
-                       [(ngModel)]="contrasena"
+                       [(ngModel)]="nuevoUsuario.password"
                        (input)="verificarcontrasena()">
             </div>
 
             <div class="input-group" 
-                 [class.is-valid]="contrasena && confirmarContrasena && coincidirContrasena"
-                 [class.is-invalid]="contrasena && confirmarContrasena && !coincidirContrasena">
+                 [class.is-valid]="nuevoUsuario.password && confirmarContrasena && coincidirContrasena"
+                 [class.is-invalid]="nuevoUsuario.password && confirmarContrasena && !coincidirContrasena">
                 
                 <input type="password" 
                        placeholder="Confirmar Contraseña" 
@@ -39,7 +39,7 @@
                        [(ngModel)]="confirmarContrasena"
                        (input)="verificarcontrasena()">
 
-                <span class="status-icon" *ngIf="contrasena && confirmarContrasena">
+                <span class="status-icon" *ngIf="nuevoUsuario.password && confirmarContrasena">
                     {{ coincidirContrasena ? '✓' : '✗' }}
                 </span>
             </div>
