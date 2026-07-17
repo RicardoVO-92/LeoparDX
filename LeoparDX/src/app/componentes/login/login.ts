@@ -30,7 +30,7 @@ export class LoginComponent {
 
   loginGYM() {
 
-    console.log('loginGYM clicked', this.user);
+    //console.log('loginGYM clicked', this.user);
 
     const usersCollection = collection(this.firestore, 'Usuarios');
 
@@ -45,9 +45,8 @@ export class LoginComponent {
         //Checar que sea login
         if (item.password === this.user.password) {  
           // Guarda el usuario en localStorage
-          localStorage.setItem('usuario', JSON.stringify(item));
-        
-          this.ruta.navigate(['/Dashboard']);
+          this.user.uid = item.uid;
+          this.ruta.navigate(['/Dashboard'], { state: { uid: this.user.uid } });
         } else {
           //console.warn('Invalid email or password.');
         }

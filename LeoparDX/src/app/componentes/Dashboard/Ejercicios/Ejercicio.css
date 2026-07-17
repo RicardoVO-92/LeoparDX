@@ -1,0 +1,136 @@
+.ejercicios {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.ejercicios__formulario,
+.ejercicios__tabla {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.formulario__fila {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.formulario__campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.formulario__campo label {
+  color: #374151;
+  font-size: 14px;
+}
+
+.formulario__campo input,
+.formulario__campo select,
+.formulario__campo textarea {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 14px;
+  padding: 10px;
+  width: 100%;
+}
+
+.formulario__campo textarea {
+  resize: vertical;
+}
+
+.formulario__titulo {
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.formulario__acciones {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.btn {
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 10px 14px;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.btn--principal {
+  background: #2E3192;
+  color: white;
+}
+
+.btn--secundario {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.btn--eliminar {
+  background: #dc2626;
+  color: white;
+  padding: 8px 10px;
+}
+
+.tabla {
+  overflow-x: auto;
+}
+
+.ejercicios__editar {
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+}
+
+.tabla table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.tabla th,
+.tabla td {
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+  padding: 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.tabla th {
+  color: #374151;
+  font-weight: 600;
+}
+
+.tabla__mensaje {
+  color: #6b7280;
+  font-size: 14px;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .formulario__fila {
+    grid-template-columns: 1fr;
+  }
+
+  .formulario__acciones {
+    flex-direction: column;
+  }
+}

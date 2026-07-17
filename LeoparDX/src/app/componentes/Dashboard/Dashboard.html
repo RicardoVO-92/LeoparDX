@@ -1,3 +1,34 @@
-<div class="navCard"> 
-    <p>Bienvenido, {{ usuario.apellido }}</p>
+<div class="dashboard-layout">
+
+  <aside class="sidebar" [class.sidebar--open]="sidebarOpen()">
+    <p class="sidebar__logo">UNE GYM</p>
+    <nav class="sidebar__nav">
+      <a class="sidebar__link" routerLink="/Dashboard/inicio" routerLinkActive="active">
+        <i class="ti ti-home"></i> Inicio
+      </a>
+      <a class="sidebar__link" routerLink="/Dashboard/rutinas" routerLinkActive="active">
+        <i class="ti ti-barbell"></i> Rutinas
+      </a>
+      <a class="sidebar__link" routerLink="/Dashboard/ejercicios" routerLinkActive="active">
+        <i class="ti ti-barbell"></i> Ejercicios
+      </a>
+      <a class="sidebar__link" routerLink="/Dashboard/perfil" routerLinkActive="active">
+        <i class="ti ti-user"></i> Perfil
+      </a>
+    </nav>
+  </aside>
+
+  <div class="dashboard-content">
+    <header class="topbar">
+      <button class="topbar__hamburger" (click)="toggleSidebar()">
+        <i class="ti ti-menu-2"></i>
+      </button>
+      <h1 class="topbar__title">Bienvenido, {{ usuario.nombre }}</h1>
+    </header>
+
+    <main class="dashboard-main">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+
 </div>

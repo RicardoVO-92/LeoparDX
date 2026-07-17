@@ -1,0 +1,152 @@
+<div class="ejercicios">
+  <div class="card ejercicios__formulario">
+    <h2 class="card__title">Agregar ejercicio</h2>
+
+    <form class="formulario" (ngSubmit)="agregarEjercicio()">
+      <div class="formulario__campo">
+        <label for="nombre">Nombre</label>
+        <input id="nombre" name="nombre" type="text" [(ngModel)]="nuevoEjercicio.nombre">
+      </div>
+
+      <div class="formulario__campo">
+        <label for="descripcion">Descripcion</label>
+        <textarea id="descripcion" name="descripcion" rows="3" [(ngModel)]="nuevoEjercicio.descripcion"></textarea>
+      </div>
+
+      <div class="formulario__fila">
+        <div class="formulario__campo">
+          <label for="grupoMuscular">Grupo muscular</label>
+          <select id="grupoMuscular" name="grupoMuscular" [(ngModel)]="nuevoEjercicio.grupoMuscular">
+            <option *ngFor="let grupo of gruposMusculares" [value]="grupo">{{ grupo }}</option>
+          </select>
+        </div>
+
+        <div class="formulario__campo">
+          <label for="equipamiento">Equipamiento</label>
+          <select id="equipamiento" name="equipamiento" [(ngModel)]="nuevoEjercicio.equipamiento">
+            <option *ngFor="let equipo of equipamientos" [value]="equipo">{{ equipo }}</option>
+          </select>
+        </div>
+
+        <div class="formulario__campo">
+          <label for="dificultad">Dificultad</label>
+          <select id="dificultad" name="dificultad" [(ngModel)]="nuevoEjercicio.dificultad">
+            <option *ngFor="let dificultad of dificultades" [value]="dificultad">{{ dificultad }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="formulario__fila">
+        <div class="formulario__campo">
+          <label for="videoUrl">Video URL</label>
+          <input id="videoUrl" name="videoUrl" type="text" [(ngModel)]="nuevoEjercicio.videoUrl">
+        </div>
+
+        <div class="formulario__campo">
+          <label for="imagenUrl">Imagen URL</label>
+          <input id="imagenUrl" name="imagenUrl" type="text" [(ngModel)]="nuevoEjercicio.imagenUrl">
+        </div>
+      </div>
+
+      <div class="formulario__acciones">
+        <button class="btn btn--secundario" type="button" (click)="limpiarFormulario()">Limpiar</button>
+        <button class="btn btn--principal" type="submit" [disabled]="guardando">
+          {{ guardando ? 'Guardando...' : 'Guardar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card ejercicios__tabla">
+    <h2 class="card__title">Ejercicios registrados</h2>
+
+    <form class="formulario ejercicios__editar" *ngIf="editandoEjercicio" (ngSubmit)="actualizarEjercicio()">
+      <h3 class="formulario__titulo">Editar ejercicio</h3>
+
+      <div class="formulario__campo">
+        <label for="editarNombre">Nombre</label>
+        <input id="editarNombre" name="editarNombre" type="text" [(ngModel)]="ejercicioEditando.nombre">
+      </div>
+
+      <div class="formulario__campo">
+        <label for="editarDescripcion">Descripcion</label>
+        <textarea id="editarDescripcion" name="editarDescripcion" rows="3" [(ngModel)]="ejercicioEditando.descripcion"></textarea>
+      </div>
+
+      <div class="formulario__fila">
+        <div class="formulario__campo">
+          <label for="editarGrupoMuscular">Grupo muscular</label>
+          <select id="editarGrupoMuscular" name="editarGrupoMuscular" [(ngModel)]="ejercicioEditando.grupoMuscular">
+            <option *ngFor="let grupo of gruposMusculares" [value]="grupo">{{ grupo }}</option>
+          </select>
+        </div>
+
+        <div class="formulario__campo">
+          <label for="editarEquipamiento">Equipamiento</label>
+          <select id="editarEquipamiento" name="editarEquipamiento" [(ngModel)]="ejercicioEditando.equipamiento">
+            <option *ngFor="let equipo of equipamientos" [value]="equipo">{{ equipo }}</option>
+          </select>
+        </div>
+
+        <div class="formulario__campo">
+          <label for="editarDificultad">Dificultad</label>
+          <select id="editarDificultad" name="editarDificultad" [(ngModel)]="ejercicioEditando.dificultad">
+            <option *ngFor="let dificultad of dificultades" [value]="dificultad">{{ dificultad }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="formulario__fila">
+        <div class="formulario__campo">
+          <label for="editarVideoUrl">Video URL</label>
+          <input id="editarVideoUrl" name="editarVideoUrl" type="text" [(ngModel)]="ejercicioEditando.videoUrl">
+        </div>
+
+        <div class="formulario__campo">
+          <label for="editarImagenUrl">Imagen URL</label>
+          <input id="editarImagenUrl" name="editarImagenUrl" type="text" [(ngModel)]="ejercicioEditando.imagenUrl">
+        </div>
+      </div>
+
+      <div class="formulario__acciones">
+        <button class="btn btn--secundario" type="button" (click)="cancelarEdicion()">Cancelar</button>
+        <button class="btn btn--principal" type="submit">Actualizar</button>
+      </div>
+    </form>
+
+    <p class="tabla__mensaje" *ngIf="cargando">Cargando ejercicios...</p>
+    <p class="tabla__mensaje" *ngIf="!cargando && ejercicios.length === 0">No hay ejercicios registrados.</p>
+
+    <div class="tabla" *ngIf="!cargando && ejercicios.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Grupo</th>
+            <th>Equipamiento</th>
+            <th>Dificultad</th>
+            <th>Descripcion</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let ejercicio of ejercicios">
+            <td>{{ ejercicio.nombre }}</td>
+            <td>{{ ejercicio.grupoMuscular }}</td>
+            <td>{{ ejercicio.equipamiento }}</td>
+            <td>{{ ejercicio.dificultad }}</td>
+            <td>{{ ejercicio.descripcion }}</td>
+            <td>
+              <button class="btn btn--secundario" type="button" (click)="editarEjercicio(ejercicio)">
+                Editar
+              </button>
+              <button class="btn btn--eliminar" type="button" (click)="eliminarEjercicio(ejercicio)">
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

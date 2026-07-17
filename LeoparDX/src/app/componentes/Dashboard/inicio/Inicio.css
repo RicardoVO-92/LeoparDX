@@ -1,0 +1,20 @@
+/* src/styles.css */
+.card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  width: 100%;           /* 👈 agregado: ocupa todo el ancho disponible */
+  box-sizing: border-box; /* 👈 agregado: el padding no se suma al 100%, se descuenta */
+}
+
+.card__title {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0 0 12px;
+}
+
+.card__body {
+  font-size: 14px;
+  color: #6b7280;
+}
