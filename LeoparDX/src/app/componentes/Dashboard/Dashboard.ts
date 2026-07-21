@@ -48,4 +48,8 @@ export class DashboardComponent {
     this.sidebarOpen.update(v => !v);
   }
 
+  cerrarSidebar() {
+    this.sidebarOpen.set(false);
+  }
+
 }
