@@ -11,3 +11,26 @@ body {
   background-repeat: no-repeat;
   min-height: 100vh;
 }
+body {
+  background: #f3f4f6;
+  color: #111827;
+  font-family: Inter, Arial, sans-serif;
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+.card__title {
+  font-family: "Nunito Sans", Inter, Arial, sans-serif;
+}
+
+:root {
+  --une-magenta: #C0006A;
+  --une-azul: #2E3192;
+  --une-purpura: #7B1FA2;
+  --une-gradiente: linear-gradient(90deg, #C0006A 0%, #7B1FA2 50%, #2E3192 100%);
+  --une-texto: #111827;
+  --une-muted: #6b7280;
+  --une-borde: #e5e7eb;
+}

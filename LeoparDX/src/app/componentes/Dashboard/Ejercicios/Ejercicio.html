@@ -1,60 +1,91 @@
 <div class="ejercicios">
-  <div class="card ejercicios__formulario">
-    <h2 class="card__title">Agregar ejercicio</h2>
+  <div class="ejercicios__encabezado">
+    <div>
+      <h2 class="ejercicios__titulo">Ejercicios</h2>
+      <p class="ejercicios__texto">Administra el catalogo de ejercicios para tus rutinas.</p>
+    </div>
 
-    <form class="formulario" (ngSubmit)="agregarEjercicio()">
-      <div class="formulario__campo">
-        <label for="nombre">Nombre</label>
-        <input id="nombre" name="nombre" type="text" [(ngModel)]="nuevoEjercicio.nombre">
-      </div>
+    <button class="btn btn--principal" type="button" (click)="abrirModalEjercicio()">
+      Agregar ejercicio
+    </button>
+  </div>
 
-      <div class="formulario__campo">
-        <label for="descripcion">Descripcion</label>
-        <textarea id="descripcion" name="descripcion" rows="3" [(ngModel)]="nuevoEjercicio.descripcion"></textarea>
-      </div>
+  <div class="modal" *ngIf="modalEjercicio">
+    <div class="modal__fondo" (click)="cerrarModalEjercicio()"></div>
 
-      <div class="formulario__fila">
-        <div class="formulario__campo">
-          <label for="grupoMuscular">Grupo muscular</label>
-          <select id="grupoMuscular" name="grupoMuscular" [(ngModel)]="nuevoEjercicio.grupoMuscular">
-            <option *ngFor="let grupo of gruposMusculares" [value]="grupo">{{ grupo }}</option>
-          </select>
+    <div class="modal__contenido">
+      <div class="modal__encabezado">
+        <div>
+          <h2 class="card__title">Agregar ejercicio</h2>
+          <p class="modal__texto">Paso {{ pasoEjercicio }} de 3</p>
         </div>
 
-        <div class="formulario__campo">
-          <label for="equipamiento">Equipamiento</label>
-          <select id="equipamiento" name="equipamiento" [(ngModel)]="nuevoEjercicio.equipamiento">
-            <option *ngFor="let equipo of equipamientos" [value]="equipo">{{ equipo }}</option>
-          </select>
-        </div>
-
-        <div class="formulario__campo">
-          <label for="dificultad">Dificultad</label>
-          <select id="dificultad" name="dificultad" [(ngModel)]="nuevoEjercicio.dificultad">
-            <option *ngFor="let dificultad of dificultades" [value]="dificultad">{{ dificultad }}</option>
-          </select>
-        </div>
+        <button class="btn btn--secundario" type="button" (click)="cerrarModalEjercicio()">Cerrar</button>
       </div>
 
-      <div class="formulario__fila">
-        <div class="formulario__campo">
-          <label for="videoUrl">Video URL</label>
-          <input id="videoUrl" name="videoUrl" type="text" [(ngModel)]="nuevoEjercicio.videoUrl">
-        </div>
-
-        <div class="formulario__campo">
-          <label for="imagenUrl">Imagen URL</label>
-          <input id="imagenUrl" name="imagenUrl" type="text" [(ngModel)]="nuevoEjercicio.imagenUrl">
-        </div>
+      <div class="pasos">
+        <span class="pasos__item" [class.pasos__item--activo]="pasoEjercicio === 1">Datos</span>
+        <span class="pasos__item" [class.pasos__item--activo]="pasoEjercicio === 2">Clasificacion</span>
+        <span class="pasos__item" [class.pasos__item--activo]="pasoEjercicio === 3">Media</span>
       </div>
 
-      <div class="formulario__acciones">
-        <button class="btn btn--secundario" type="button" (click)="limpiarFormulario()">Limpiar</button>
-        <button class="btn btn--principal" type="submit" [disabled]="guardando">
-          {{ guardando ? 'Guardando...' : 'Guardar' }}
-        </button>
-      </div>
-    </form>
+      <form class="formulario" (ngSubmit)="agregarEjercicio()">
+        <div *ngIf="pasoEjercicio === 1">
+          <div class="formulario__campo">
+            <label for="nombre">Nombre</label>
+            <input id="nombre" name="nombre" type="text" [(ngModel)]="nuevoEjercicio.nombre">
+          </div>
+
+          <div class="formulario__campo">
+            <label for="descripcion">Descripcion</label>
+            <textarea id="descripcion" name="descripcion" rows="4" [(ngModel)]="nuevoEjercicio.descripcion"></textarea>
+          </div>
+        </div>
+
+        <div class="formulario__fila" *ngIf="pasoEjercicio === 2">
+          <div class="formulario__campo">
+            <label for="grupoMuscular">Grupo muscular</label>
+            <select id="grupoMuscular" name="grupoMuscular" [(ngModel)]="nuevoEjercicio.grupoMuscular">
+              <option *ngFor="let grupo of gruposMusculares" [value]="grupo">{{ grupo }}</option>
+            </select>
+          </div>
+
+          <div class="formulario__campo">
+            <label for="equipamiento">Equipamiento</label>
+            <select id="equipamiento" name="equipamiento" [(ngModel)]="nuevoEjercicio.equipamiento">
+              <option *ngFor="let equipo of equipamientos" [value]="equipo">{{ equipo }}</option>
+            </select>
+          </div>
+
+          <div class="formulario__campo">
+            <label for="dificultad">Dificultad</label>
+            <select id="dificultad" name="dificultad" [(ngModel)]="nuevoEjercicio.dificultad">
+              <option *ngFor="let dificultad of dificultades" [value]="dificultad">{{ dificultad }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="formulario__fila" *ngIf="pasoEjercicio === 3">
+          <div class="formulario__campo">
+            <label for="videoUrl">Video URL</label>
+            <input id="videoUrl" name="videoUrl" type="text" [(ngModel)]="nuevoEjercicio.videoUrl">
+          </div>
+
+          <div class="formulario__campo">
+            <label for="imagenUrl">Imagen URL</label>
+            <input id="imagenUrl" name="imagenUrl" type="text" [(ngModel)]="nuevoEjercicio.imagenUrl">
+          </div>
+        </div>
+
+        <div class="formulario__acciones">
+          <button class="btn btn--secundario" type="button" *ngIf="pasoEjercicio > 1" (click)="anteriorPasoEjercicio()">Anterior</button>
+          <button class="btn btn--principal" type="button" *ngIf="pasoEjercicio < 3" (click)="siguientePasoEjercicio()">Siguiente</button>
+          <button class="btn btn--principal" type="submit" *ngIf="pasoEjercicio === 3" [disabled]="guardando">
+            {{ guardando ? 'Guardando...' : 'Guardar' }}
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <div class="card ejercicios__tabla">

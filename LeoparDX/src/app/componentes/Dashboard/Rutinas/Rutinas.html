@@ -1,79 +1,109 @@
 <div class="rutinas">
-  <div class="card rutinas__card">
-    <h2 class="card__title">Crear rutina</h2>
+  <div class="rutinas__encabezado">
+    <div>
+      <h2 class="rutinas__titulo">Rutinas</h2>
+      <p class="rutinas__texto">Crea, organiza e inicia rutinas para registrar tu entrenamiento.</p>
+    </div>
 
-    <form class="formulario" (ngSubmit)="crearRutina()">
-      <div class="formulario__fila">
-        <div class="formulario__campo">
-          <label for="nombre">Nombre</label>
-          <input id="nombre" name="nombre" type="text" [(ngModel)]="nuevaRutina.nombre">
+    <button class="btn btn--claro" type="button" (click)="abrirModalRutina()">
+      Agregar rutina
+    </button>
+  </div>
+
+  <div class="modal" *ngIf="modalRutina">
+    <div class="modal__fondo" (click)="cerrarModalRutina()"></div>
+
+    <div class="modal__contenido">
+      <div class="modal__encabezado">
+        <div>
+          <h2 class="card__title">Crear rutina</h2>
+          <p class="modal__texto">Paso {{ pasoRutina }} de 3</p>
         </div>
 
-        <div class="formulario__campo">
-          <label for="descripcion">Descripcion</label>
-          <input id="descripcion" name="descripcion" type="text" [(ngModel)]="nuevaRutina.descripcion">
-        </div>
+        <button class="btn btn--secundario" type="button" (click)="cerrarModalRutina()">Cerrar</button>
       </div>
 
-      <div class="formulario__fila">
-        <div class="formulario__campo">
-          <label for="objetivo">Objetivo</label>
-          <select id="objetivo" name="objetivo" [(ngModel)]="nuevaRutina.objetivo">
-            <option *ngFor="let objetivo of objetivos" [value]="objetivo">{{ objetivo }}</option>
-          </select>
-        </div>
-
-        <div class="formulario__campo">
-          <label for="nivel">Nivel</label>
-          <select id="nivel" name="nivel" [(ngModel)]="nuevaRutina.nivel">
-            <option *ngFor="let nivel of niveles" [value]="nivel">{{ nivel }}</option>
-          </select>
-        </div>
-
-        <div class="formulario__campo">
-          <label for="tipo">Tipo</label>
-          <select id="tipo" name="tipo" [(ngModel)]="nuevaRutina.tipo">
-            <option *ngFor="let tipo of tipos" [value]="tipo">{{ tipo }}</option>
-          </select>
-        </div>
+      <div class="pasos">
+        <span class="pasos__item" [class.pasos__item--activo]="pasoRutina === 1">Datos</span>
+        <span class="pasos__item" [class.pasos__item--activo]="pasoRutina === 2">Objetivo</span>
+        <span class="pasos__item" [class.pasos__item--activo]="pasoRutina === 3">Dias</span>
       </div>
 
-      <div class="formulario__fila">
-        <div class="formulario__campo">
-          <label for="pesoMinKg">Peso minimo</label>
-          <input id="pesoMinKg" name="pesoMinKg" type="number" [(ngModel)]="nuevaRutina.pesoMinKg">
+      <form class="formulario" (ngSubmit)="crearRutina()">
+        <div class="formulario__fila" *ngIf="pasoRutina === 1">
+          <div class="formulario__campo">
+            <label for="nombre">Nombre</label>
+            <input id="nombre" name="nombre" type="text" [(ngModel)]="nuevaRutina.nombre">
+          </div>
+
+          <div class="formulario__campo">
+            <label for="descripcion">Descripcion</label>
+            <input id="descripcion" name="descripcion" type="text" [(ngModel)]="nuevaRutina.descripcion">
+          </div>
         </div>
 
-        <div class="formulario__campo">
-          <label for="pesoMaxKg">Peso maximo</label>
-          <input id="pesoMaxKg" name="pesoMaxKg" type="number" [(ngModel)]="nuevaRutina.pesoMaxKg">
-        </div>
-      </div>
+        <div class="formulario__fila" *ngIf="pasoRutina === 2">
+          <div class="formulario__campo">
+            <label for="objetivo">Objetivo</label>
+            <select id="objetivo" name="objetivo" [(ngModel)]="nuevaRutina.objetivo">
+              <option *ngFor="let objetivo of objetivos" [value]="objetivo">{{ objetivo }}</option>
+            </select>
+          </div>
 
-      <div class="formulario__campo">
-        <label>Dias de la semana</label>
-        <div class="dias">
-          <label class="dias__item" *ngFor="let dia of diasSemana">
-            <input type="checkbox" [checked]="diasSeleccionados.includes(dia)" (change)="cambiarDia(dia, $event)">
-            {{ dia }}
+          <div class="formulario__campo">
+            <label for="nivel">Nivel</label>
+            <select id="nivel" name="nivel" [(ngModel)]="nuevaRutina.nivel">
+              <option *ngFor="let nivel of niveles" [value]="nivel">{{ nivel }}</option>
+            </select>
+          </div>
+
+          <div class="formulario__campo">
+            <label for="tipo">Tipo</label>
+            <select id="tipo" name="tipo" [(ngModel)]="nuevaRutina.tipo">
+              <option *ngFor="let tipo of tipos" [value]="tipo">{{ tipo }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="formulario__fila" *ngIf="pasoRutina === 2">
+          <div class="formulario__campo">
+            <label for="pesoMinKg">Peso minimo</label>
+            <input id="pesoMinKg" name="pesoMinKg" type="number" [(ngModel)]="nuevaRutina.pesoMinKg">
+          </div>
+
+          <div class="formulario__campo">
+            <label for="pesoMaxKg">Peso maximo</label>
+            <input id="pesoMaxKg" name="pesoMaxKg" type="number" [(ngModel)]="nuevaRutina.pesoMaxKg">
+          </div>
+        </div>
+
+        <div class="formulario__campo" *ngIf="pasoRutina === 3">
+          <label>Dias de la semana</label>
+          <div class="dias">
+            <label class="dias__item" *ngFor="let dia of diasSemana">
+              <input type="checkbox" [checked]="diasSeleccionados.includes(dia)" (change)="cambiarDia(dia, $event)">
+              {{ dia }}
+            </label>
+          </div>
+        </div>
+
+        <div class="formulario__campo formulario__check" *ngIf="pasoRutina === 3">
+          <label>
+            <input name="publica" type="checkbox" [(ngModel)]="nuevaRutina.publica">
+            Publica
           </label>
         </div>
-      </div>
 
-      <div class="formulario__campo formulario__check">
-        <label>
-          <input name="publica" type="checkbox" [(ngModel)]="nuevaRutina.publica">
-          Publica
-        </label>
-      </div>
-
-      <div class="formulario__acciones">
-        <button class="btn btn--secundario" type="button" (click)="limpiarRutina()">Limpiar</button>
-        <button class="btn btn--principal" type="submit" [disabled]="guardandoRutina">
-          {{ guardandoRutina ? 'Guardando...' : 'Guardar rutina' }}
-        </button>
-      </div>
-    </form>
+        <div class="formulario__acciones">
+          <button class="btn btn--secundario" type="button" *ngIf="pasoRutina > 1" (click)="anteriorPasoRutina()">Anterior</button>
+          <button class="btn btn--secundario" type="button" (click)="limpiarRutina()">Limpiar</button>
+          <button class="btn btn--principal" type="button" *ngIf="pasoRutina < 3" (click)="siguientePasoRutina()">Siguiente</button>
+          <button class="btn btn--principal" type="submit" *ngIf="pasoRutina === 3" [disabled]="guardandoRutina">
+            {{ guardandoRutina ? 'Guardando...' : 'Guardar rutina' }}
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <div class="card rutinas__card">
@@ -103,6 +133,9 @@
               <button class="btn btn--principal" type="button" (click)="seleccionarRutina(rutina)">
                 Ver ejercicios
               </button>
+              <button class="btn btn--secundario" type="button" (click)="iniciarRutina(rutina)">
+                Iniciar
+              </button>
             </td>
           </tr>
         </tbody>
@@ -110,7 +143,7 @@
     </div>
   </div>
 
-  <div class="card rutinas__card" *ngIf="rutinaSeleccionada">
+  <div class="card rutinas__card" *ngIf="rutinaSeleccionada && !rutinaIniciada">
     <h2 class="card__title">Ejercicios de {{ rutinaSeleccionada.nombre }}</h2>
 
     <form class="formulario" (ngSubmit)="agregarEjercicioRutina()">
@@ -185,6 +218,68 @@
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+
+  <div class="card rutinas__card" *ngIf="rutinaIniciada">
+    <h2 class="card__title">Rutina iniciada: {{ rutinaSeleccionada.nombre }}</h2>
+
+    <p class="rutinas__mensaje" *ngIf="entrenamientoActual.length === 0">Esta rutina no tiene ejercicios para iniciar.</p>
+
+    <div class="descanso" *ngIf="descansoActivo">
+      <p>Descanso: {{ descansoSegundos }} segundos</p>
+    </div>
+
+    <div class="tabla" *ngIf="entrenamientoActual.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Orden</th>
+            <th>Ejercicio</th>
+            <th>Series</th>
+            <th>Repeticiones</th>
+            <th>Peso kg</th>
+            <th>Descanso</th>
+            <th>Hecho</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let ejercicio of entrenamientoActual" [class.tabla__fila--lista]="ejercicio.completado">
+            <td>{{ ejercicio.orden }}</td>
+            <td>
+              <strong>{{ ejercicio.nombre }}</strong>
+              <p class="rutinas__nota">{{ ejercicio.notas }}</p>
+            </td>
+            <td>
+              <input class="tabla__input" type="number" [(ngModel)]="ejercicio.seriesHechas">
+              <span class="tabla__ayuda">Plan: {{ ejercicio.seriesPlaneadas }}</span>
+            </td>
+            <td>
+              <input class="tabla__input" type="number" [(ngModel)]="ejercicio.repeticionesHechas">
+              <span class="tabla__ayuda">Plan: {{ ejercicio.repeticionesPlaneadas }}</span>
+            </td>
+            <td>
+              <input class="tabla__input" type="number" [(ngModel)]="ejercicio.pesoUsadoKg">
+            </td>
+            <td>
+              <button class="btn btn--secundario" type="button" (click)="iniciarDescanso(ejercicio)">
+                Descanso
+              </button>
+            </td>
+            <td>
+              <button class="btn btn--principal" type="button" (click)="marcarEjercicio(ejercicio)">
+                {{ ejercicio.completado ? 'Listo' : 'Marcar' }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="formulario__acciones" *ngIf="entrenamientoActual.length > 0">
+      <button class="btn btn--principal" type="button" [disabled]="guardandoEntrenamiento" (click)="finalizarRutina()">
+        {{ guardandoEntrenamiento ? 'Guardando...' : 'Finalizar rutina' }}
+      </button>
     </div>
   </div>
 </div>

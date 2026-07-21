@@ -22,6 +22,8 @@ export class EjercicioComponent implements OnDestroy {
   cargando: boolean = false;
   guardando: boolean = false;
   editandoEjercicio: boolean = false;
+  modalEjercicio: boolean = false;
+  pasoEjercicio: number = 1;
 
   gruposMusculares: CatalogoEjercicio['grupoMuscular'][] = ['pecho', 'espalda', 'pierna', 'hombro', 'brazo', 'abdomen', 'cardio'];
   equipamientos: CatalogoEjercicio['equipamiento'][] = ['barra', 'mancuernas', 'maquina', 'sin equipo', 'banda', 'polea'];
@@ -84,6 +86,7 @@ export class EjercicioComponent implements OnDestroy {
 
       alert('Ejercicio registrado con exito');
       this.limpiarFormulario();
+      this.cerrarModalEjercicio();
     } catch (error) {
       console.log('Error al registrar ejercicio', error);
       alert('Hubo un error al registrar el ejercicio');
@@ -157,6 +160,29 @@ export class EjercicioComponent implements OnDestroy {
 
   limpiarFormulario() {
     this.nuevoEjercicio = new CatalogoEjercicio();
+    this.pasoEjercicio = 1;
+  }
+
+  abrirModalEjercicio() {
+    this.modalEjercicio = true;
+    this.pasoEjercicio = 1;
+  }
+
+  cerrarModalEjercicio() {
+    this.modalEjercicio = false;
+    this.pasoEjercicio = 1;
+  }
+
+  siguientePasoEjercicio() {
+    if (this.pasoEjercicio < 3) {
+      this.pasoEjercicio = this.pasoEjercicio + 1;
+    }
+  }
+
+  anteriorPasoEjercicio() {
+    if (this.pasoEjercicio > 1) {
+      this.pasoEjercicio = this.pasoEjercicio - 1;
+    }
   }
 
   ngOnDestroy() {

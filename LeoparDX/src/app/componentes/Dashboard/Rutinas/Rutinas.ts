@@ -28,13 +28,22 @@ export class RutinasComponent {
   rutinas: any[] = [];
   ejerciciosCatalogo: any[] = [];
   ejerciciosRutina: any[] = [];
+  entrenamientoActual: any[] = [];
   diasSeleccionados: string[] = [];
   rutinaSeleccionada: any = null;
+  rutinaIniciada: boolean = false;
+  descansoActivo: boolean = false;
+  descansoSegundos: number = 0;
+  descansoEjercicioId: string = '';
+  descansoInterval: any = null;
+  pasoRutina: number = 1;
+  modalRutina: boolean = false;
 
   cargandoRutinas: boolean = false;
   cargandoEjercicios: boolean = false;
   guardandoRutina: boolean = false;
   guardandoEjercicio: boolean = false;
+  guardandoEntrenamiento: boolean = false;
 
   diasSemana = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'];
   niveles = ['principiante', 'intermedio', 'avanzado'];
@@ -106,6 +115,28 @@ export class RutinasComponent {
     }
   }
 
+  siguientePasoRutina() {
+    if (this.pasoRutina < 3) {
+      this.pasoRutina = this.pasoRutina + 1;
+    }
+  }
+
+  abrirModalRutina() {
+    this.modalRutina = true;
+    this.pasoRutina = 1;
+  }
+
+  cerrarModalRutina() {
+    this.modalRutina = false;
+    this.pasoRutina = 1;
+  }
+
+  anteriorPasoRutina() {
+    if (this.pasoRutina > 1) {
+      this.pasoRutina = this.pasoRutina - 1;
+    }
+  }
+
   async crearRutina() {
     if (!this.usuario.uid) {
       alert('No se encontro el usuario');
@@ -144,6 +175,7 @@ export class RutinasComponent {
 
       alert('Rutina creada con exito');
       this.limpiarRutina();
+      this.cerrarModalRutina();
     } catch (error) {
       console.log('Error al crear rutina', error);
       alert('Hubo un error al crear la rutina');
@@ -154,6 +186,8 @@ export class RutinasComponent {
 
   seleccionarRutina(rutina: any) {
     this.rutinaSeleccionada = rutina;
+    this.rutinaIniciada = false;
+    this.entrenamientoActual = [];
     this.nuevoEjercicioRutina = new EjercicioRutina();
     this.nuevoEjercicioRutina.series = 3;
     this.nuevoEjercicioRutina.repeticiones = 10;
@@ -175,11 +209,116 @@ export class RutinasComponent {
     collectionData(ejerciciosRutinaCollection, { idField: 'id' }).subscribe((data: any[]) => {
       this.ejerciciosRutina = data.sort((a, b) => Number(a.orden || 0) - Number(b.orden || 0));
       this.nuevoEjercicioRutina.orden = this.ejerciciosRutina.length + 1;
+      if (this.rutinaIniciada) {
+        this.prepararEntrenamiento();
+      }
       this.cargandoEjercicios = false;
     }, (error: any) => {
       console.log('Error al obtener ejercicios de rutina', error);
       this.cargandoEjercicios = false;
     });
+  }
+
+  iniciarRutina(rutina: any) {
+    this.rutinaSeleccionada = rutina;
+    this.rutinaIniciada = true;
+    this.obtenerEjerciciosRutina();
+  }
+
+  prepararEntrenamiento() {
+    this.entrenamientoActual = this.ejerciciosRutina.map((ejercicio) => {
+      return {
+        ejercicioRutinaId: ejercicio.id,
+        ejercicioId: ejercicio.ejercicioId,
+        nombre: this.obtenerNombreEjercicio(ejercicio.ejercicioId),
+        orden: ejercicio.orden,
+        seriesPlaneadas: ejercicio.series,
+        repeticionesPlaneadas: ejercicio.repeticiones,
+        descansoPlaneado: ejercicio.tiempoDescansoSeg,
+        notas: ejercicio.notas,
+        seriesHechas: ejercicio.series,
+        repeticionesHechas: ejercicio.repeticiones,
+        pesoUsadoKg: 0,
+        completado: false
+      };
+    });
+  }
+
+  iniciarDescanso(ejercicio: any) {
+    if (this.descansoInterval) {
+      clearInterval(this.descansoInterval);
+    }
+
+    this.descansoActivo = true;
+    this.descansoEjercicioId = ejercicio.ejercicioRutinaId;
+    this.descansoSegundos = Number(ejercicio.descansoPlaneado || 60);
+
+    this.descansoInterval = setInterval(() => {
+      this.descansoSegundos = this.descansoSegundos - 1;
+
+      if (this.descansoSegundos <= 0) {
+        clearInterval(this.descansoInterval);
+        this.descansoInterval = null;
+        this.descansoActivo = false;
+        this.descansoEjercicioId = '';
+      }
+    }, 1000);
+  }
+
+  marcarEjercicio(ejercicio: any) {
+    ejercicio.completado = !ejercicio.completado;
+  }
+
+  async finalizarRutina() {
+    if (!this.rutinaSeleccionada || !this.rutinaSeleccionada.id) {
+      return;
+    }
+
+    if (this.entrenamientoActual.length === 0) {
+      alert('No hay ejercicios para guardar');
+      return;
+    }
+
+    this.guardandoEntrenamiento = true;
+
+    try {
+      const historialCollection = collection(this.firestore, 'Historial-Rutina');
+
+      const res = await addDoc(historialCollection, {
+        usuarioId: this.usuario.uid,
+        rutinaId: this.rutinaSeleccionada.id,
+        rutinaNombre: this.rutinaSeleccionada.nombre,
+        fecha: new Date(),
+        ejercicios: this.entrenamientoActual.map((ejercicio) => {
+          return {
+            ejercicioRutinaId: ejercicio.ejercicioRutinaId,
+            ejercicioId: ejercicio.ejercicioId,
+            nombre: ejercicio.nombre,
+            orden: Number(ejercicio.orden || 0),
+            seriesPlaneadas: Number(ejercicio.seriesPlaneadas || 0),
+            repeticionesPlaneadas: Number(ejercicio.repeticionesPlaneadas || 0),
+            seriesHechas: Number(ejercicio.seriesHechas || 0),
+            repeticionesHechas: Number(ejercicio.repeticionesHechas || 0),
+            pesoUsadoKg: Number(ejercicio.pesoUsadoKg || 0),
+            completado: ejercicio.completado
+          };
+        })
+      });
+
+      const historialDoc = doc(this.firestore, 'Historial-Rutina', res.id);
+      await updateDoc(historialDoc, {
+        id: res.id
+      });
+
+      alert('Rutina finalizada con exito');
+      this.rutinaIniciada = false;
+      this.entrenamientoActual = [];
+    } catch (error) {
+      console.log('Error al finalizar rutina', error);
+      alert('Hubo un error al finalizar la rutina');
+    }
+
+    this.guardandoEntrenamiento = false;
   }
 
   async agregarEjercicioRutina() {
@@ -236,6 +375,7 @@ export class RutinasComponent {
     this.nuevaRutina.pesoMinKg = 0;
     this.nuevaRutina.pesoMaxKg = 0;
     this.diasSeleccionados = [];
+    this.pasoRutina = 1;
   }
 
   limpiarEjercicioRutina() {
