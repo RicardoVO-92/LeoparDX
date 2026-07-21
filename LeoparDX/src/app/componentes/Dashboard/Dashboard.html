@@ -1,18 +1,20 @@
 <div class="dashboard-layout">
 
+  <div class="sidebar__overlay" *ngIf="sidebarOpen()" (click)="cerrarSidebar()"></div>
+
   <aside class="sidebar" [class.sidebar--open]="sidebarOpen()">
     <p class="sidebar__logo">UNE GYM</p>
     <nav class="sidebar__nav">
-      <a class="sidebar__link" routerLink="/Dashboard/inicio" routerLinkActive="active">
+      <a class="sidebar__link" routerLink="/Dashboard/inicio" routerLinkActive="active" (click)="cerrarSidebar()">
         <i class="ti ti-home"></i> Inicio
       </a>
-      <a class="sidebar__link" routerLink="/Dashboard/rutinas" routerLinkActive="active">
+      <a class="sidebar__link" routerLink="/Dashboard/rutinas" routerLinkActive="active" (click)="cerrarSidebar()">
         <i class="ti ti-barbell"></i> Rutinas
       </a>
-      <a class="sidebar__link" routerLink="/Dashboard/ejercicios" routerLinkActive="active">
+      <a class="sidebar__link" routerLink="/Dashboard/ejercicios" routerLinkActive="active" (click)="cerrarSidebar()">
         <i class="ti ti-barbell"></i> Ejercicios
       </a>
-      <a class="sidebar__link" routerLink="/Dashboard/perfil" routerLinkActive="active">
+      <a class="sidebar__link" routerLink="/Dashboard/perfil" routerLinkActive="active" (click)="cerrarSidebar()">
         <i class="ti ti-user"></i> Perfil
       </a>
     </nav>
