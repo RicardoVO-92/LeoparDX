@@ -1,11 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms'
 import { CommonModule } from '@angular/common';
-import { collection, collectionData, Firestore, query, where, limit } from '@angular/fire/firestore';
+import { collection, collectionData, doc, Firestore, query, where, limit, updateDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Usuario } from '../../models/usuario.model';
-
-
 
 @Component({
   selector: 'login',
@@ -20,11 +18,9 @@ export class LoginComponent {
   private firestore: Firestore = inject(Firestore);
 
   user: Usuario = new Usuario();
-  // Estado simple para mostrar/ocultar el formulario
-  
 
   constructor(public ruta: Router) {
-    
+
   }
     irRegistrar(){
     this.ruta.navigate(['/Register']);
@@ -32,36 +28,37 @@ export class LoginComponent {
   
 
   loginGYM() {
-
-    //console.log('loginGYM clicked', this.user);
-
     const usersCollection = collection(this.firestore, 'Usuarios');
 
     const q = query(usersCollection, where('email', '==', this.user.email), limit(1));
 
-    collectionData(q).subscribe((data: any[]) => {
+    collectionData(q, { idField: 'id' }).subscribe(async (data: any[]) => {
 
       if (data && data.length > 0) {
 
         const item = data[0];
-    
-        //Checar que sea login
-        if (item.password === this.user.password) {  
-          // Guarda el usuario en localStorage
-          this.user.uid = item.uid;
+
+        if (item.password === this.user.password) {
+          this.user.uid = item.uid || item.id;
+
+          if (!item.uid && item.id) {
+            const usuarioDoc = doc(this.firestore, 'Usuarios', item.id);
+
+            await updateDoc(usuarioDoc, {
+              uid: item.id
+            });
+          }
+
           this.ruta.navigate(['/Dashboard'], { state: { uid: this.user.uid } });
         } else {
-          //console.warn('Invalid email or password.');
+
         }
       } else {
-        //console.warn('Invalid email or password.');
+
       }
     }, (err:any) => {
       console.log('Login query error', err);
-      //console.log('Error checking credentials.');
     });
   }
 
 }
-
-

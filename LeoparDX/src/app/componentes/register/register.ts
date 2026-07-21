@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms'
 import { CommonModule } from '@angular/common';
-import { collection, collectionData, Firestore, query, where, limit, addDoc } from '@angular/fire/firestore';
+import { addDoc, collection, doc, Firestore, updateDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 
 @Component({
@@ -34,28 +34,38 @@ export class registerComponent {
   }
 
   async registrarUsuario() {
-    // Primero validamos si las contraseñas coinciden
     if (!this.coincidirContrasena) {
-      alert('Las contraseñas no coinciden');
+      alert('Las contrasenas no coinciden');
       return;
     }
 
     try {
       const claseColeccion = collection(this.firestore, 'Usuarios');
-      
-      // Enviamos el objeto plano a Firestore
+
       const res = await addDoc(claseColeccion, {
         nombre: this.nuevoUsuario.nombre,
         apellido: this.nuevoUsuario.apellido,
         nombreUsuario: this.nuevoUsuario.nombreUsuario,
         email: this.nuevoUsuario.email,
-        password: this.nuevoUsuario.password // Nota: En producción recuerda encriptarla
+        password: this.nuevoUsuario.password,
+        Activo: false,
+        actualizadoEn: new Date(),
+        creadoEn: new Date(),
+        fechaNacimiento: new Date(),
+        fotoUrl: '',
+        rol: 'alumno',
+        telefono: ''
+      });
+
+      const usuarioDoc = doc(this.firestore, 'Usuarios', res.id);
+
+      await updateDoc(usuarioDoc, {
+        uid: res.id
       });
 
       console.log('Usuario registrado con ID: ', res.id);
-      alert('¡Usuario registrado con éxito!');
-      
-      // Una vez registrado, lo mandamos al Home o Login
+      alert('Usuario registrado con exito');
+
       this.regresarMain();
 
     } catch (error) {
@@ -72,4 +82,3 @@ export class Usuarios {
   email: string = '';
   password: string = '';
 }
-
