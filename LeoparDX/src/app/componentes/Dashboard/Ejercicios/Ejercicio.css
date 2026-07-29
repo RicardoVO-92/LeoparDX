@@ -40,6 +40,7 @@
   border: 1px solid rgba(229, 231, 235, 0.9);
   border-radius: 14px;
   box-shadow: 0 10px 25px rgba(17, 24, 39, 0.08);
+  padding: 16px;
 }
 
 .formulario {

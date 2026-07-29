@@ -2,11 +2,13 @@ import { Component, inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { addDoc, collection, collectionData, doc, Firestore, query, updateDoc, where } from '@angular/fire/firestore';
+import { addDoc, collection, collectionData, doc, Firestore, query, updateDoc, where, writeBatch } from '@angular/fire/firestore';
 import { DashboardComponent } from '../Dashboard';
 import { Usuario } from '../../../models/usuario.model';
 import { Rutina } from '../../../models/rutina.model';
 import { EjercicioRutina } from '../../../models/ejercicio-rutina.model';
+import { HistorialEjercicio } from '../../../models';
+import { Timestamp } from '@angular/fire/firestore';
 
 @Component({
   selector: 'Rutinas',
@@ -236,9 +238,7 @@ export class RutinasComponent {
         repeticionesPlaneadas: ejercicio.repeticiones,
         descansoPlaneado: ejercicio.tiempoDescansoSeg,
         notas: ejercicio.notas,
-        seriesHechas: ejercicio.series,
-        repeticionesHechas: ejercicio.repeticiones,
-        pesoUsadoKg: 0,
+        series: Array.from({ length: ejercicio.series }, () => ({ peso: 0, repeticiones: ejercicio.repeticiones, completado: false })),
         completado: false
       };
     });
@@ -265,59 +265,55 @@ export class RutinasComponent {
     }, 1000);
   }
 
-  marcarEjercicio(ejercicio: any) {
-    ejercicio.completado = !ejercicio.completado;
+  marcarSerie(serie: any) {
+    serie.completado = !serie.completado;
   }
 
   async finalizarRutina() {
     if (!this.rutinaSeleccionada || !this.rutinaSeleccionada.id) {
       return;
     }
-
+  
     if (this.entrenamientoActual.length === 0) {
       alert('No hay ejercicios para guardar');
       return;
     }
-
+  
     this.guardandoEntrenamiento = true;
-
+  
     try {
-      const historialCollection = collection(this.firestore, 'Historial-Rutina');
-
-      const res = await addDoc(historialCollection, {
-        usuarioId: this.usuario.uid,
-        rutinaId: this.rutinaSeleccionada.id,
-        rutinaNombre: this.rutinaSeleccionada.nombre,
-        fecha: new Date(),
-        ejercicios: this.entrenamientoActual.map((ejercicio) => {
-          return {
-            ejercicioRutinaId: ejercicio.ejercicioRutinaId,
-            ejercicioId: ejercicio.ejercicioId,
-            nombre: ejercicio.nombre,
-            orden: Number(ejercicio.orden || 0),
-            seriesPlaneadas: Number(ejercicio.seriesPlaneadas || 0),
-            repeticionesPlaneadas: Number(ejercicio.repeticionesPlaneadas || 0),
-            seriesHechas: Number(ejercicio.seriesHechas || 0),
-            repeticionesHechas: Number(ejercicio.repeticionesHechas || 0),
-            pesoUsadoKg: Number(ejercicio.pesoUsadoKg || 0),
-            completado: ejercicio.completado
-          };
-        })
+      const batch = writeBatch(this.firestore);
+      const historialCollection = collection(this.firestore, `usuarios/${this.usuario.uid}/historial`);
+  
+      this.entrenamientoActual.forEach(ejercicio => {
+        const volumen = ejercicio.series.reduce((acc: any, serie: any) => acc + (serie.peso * serie.repeticiones), 0);
+  
+        const historial: HistorialEjercicio = {
+          id: '',
+          fecha: Timestamp.now(),
+          rutinaId: this.rutinaSeleccionada.id,
+          rutinaNombre: this.rutinaSeleccionada.nombre,
+          ejercicioId: ejercicio.ejercicioId,
+          ejercicioNombre: ejercicio.nombre,
+          series: ejercicio.series.map((s: any) => ({ peso: s.peso, repeticiones: s.repeticiones })),
+          volumen: volumen
+        };
+  
+        const docRef = doc(historialCollection);
+        historial.id = docRef.id;
+        batch.set(docRef, historial);
       });
-
-      const historialDoc = doc(this.firestore, 'Historial-Rutina', res.id);
-      await updateDoc(historialDoc, {
-        id: res.id
-      });
-
-      alert('Rutina finalizada con exito');
+  
+      await batch.commit();
+  
+      alert('Rutina finalizada con éxito');
       this.rutinaIniciada = false;
       this.entrenamientoActual = [];
     } catch (error) {
       console.log('Error al finalizar rutina', error);
       alert('Hubo un error al finalizar la rutina');
     }
-
+  
     this.guardandoEntrenamiento = false;
   }
 
