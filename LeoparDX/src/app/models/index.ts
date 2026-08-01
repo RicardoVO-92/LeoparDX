@@ -7,3 +7,4 @@ export * from './cita.model';
 export * from './rutina.model';
 export * from './ejercicio-rutina.model';
 export * from './catalogo-ejercicio.model';
+export * from './historial-ejercicio.model';

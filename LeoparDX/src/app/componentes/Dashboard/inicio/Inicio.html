@@ -1,4 +1,24 @@
-<!-- div class="card"  -->
-<div >
-  <p>Bienvenido, Esta sección esta en construcción Inicio 🛠️🛠️</p>
+<div class="inicio-container">
+  <h2 class="inicio-title">Historial de Entrenamiento</h2>
+
+  <div class="card" *ngIf="historial.length === 0">
+    <p>Aún no has registrado ningún entrenamiento. ¡Completa una rutina para empezar!</p>
+  </div>
+
+  <div class="historial-grid">
+    <div class="card historial-card" *ngFor="let dia of historial">
+      <div class="card__header">
+        <h3 class="historial-card__fecha">{{ dia.fecha | date:'d MMMM y' }}</h3>
+        <p class="historial-card__resumen">{{ dia.resumen }}</p>
+      </div>
+      <div class="card__body">
+        <ul class="ejercicio-lista">
+          <li class="ejercicio-item" *ngFor="let ej of dia.ejercicios">
+            <span class="ejercicio-nombre">{{ ej.nombre }}</span>
+            <span class="ejercicio-volumen">{{ ej.volumen | number }} kg</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>

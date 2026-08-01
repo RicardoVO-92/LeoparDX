@@ -1,20 +1,75 @@
-/* src/styles.css */
-.card {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 16px;
-  width: 100%;           /* 👈 agregado: ocupa todo el ancho disponible */
-  box-sizing: border-box; /* 👈 agregado: el padding no se suma al 100%, se descuenta */
+.inicio-container {
+  padding: 20px;
 }
 
-.card__title {
-  font-size: 16px;
-  font-weight: 500;
-  margin: 0 0 12px;
+.inicio-title {
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: var(--une-texto);
+}
+
+.historial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.historial-card {
+  /* Extending global .card style */
+  padding: 0; /* Reset padding as it's handled by card__header and card__body */
+}
+
+.card__header {
+  padding: 20px;
+  border-bottom: 1px solid var(--une-borde);
+}
+
+.historial-card__fecha {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: var(--une-texto);
+}
+
+.historial-card__resumen {
+  font-size: 14px;
+  color: var(--une-muted);
+  margin: 0;
 }
 
 .card__body {
+  padding: 20px;
+}
+
+.ejercicio-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ejercicio-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
   font-size: 14px;
-  color: #6b7280;
+}
+
+.ejercicio-item:not(:last-child) {
+  border-bottom: 1px solid var(--une-borde);
+}
+
+.ejercicio-nombre {
+  font-weight: 500;
+  color: var(--une-texto);
+}
+
+.ejercicio-volumen {
+  font-weight: 600;
+  color: var(--une-azul);
+  background-color: #ebf8ff;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 13px;
 }

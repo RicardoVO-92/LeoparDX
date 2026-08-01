@@ -30,52 +30,58 @@
       </div>
 
       <form class="formulario" (ngSubmit)="agregarEjercicio()">
-        <div *ngIf="pasoEjercicio === 1">
-          <div class="formulario__campo">
-            <label for="nombre">Nombre</label>
-            <input id="nombre" name="nombre" type="text" [(ngModel)]="nuevoEjercicio.nombre">
-          </div>
+        <ng-container *ngIf="pasoEjercicio === 1">
+          <div>
+            <div class="formulario__campo">
+              <label for="nombre">Nombre</label>
+              <input id="nombre" name="nombre" type="text" [(ngModel)]="nuevoEjercicio.nombre">
+            </div>
 
-          <div class="formulario__campo">
-            <label for="descripcion">Descripcion</label>
-            <textarea id="descripcion" name="descripcion" rows="4" [(ngModel)]="nuevoEjercicio.descripcion"></textarea>
+            <div class="formulario__campo">
+              <label for="descripcion">Descripcion</label>
+              <textarea id="descripcion" name="descripcion" rows="4" [(ngModel)]="nuevoEjercicio.descripcion"></textarea>
+            </div>
           </div>
-        </div>
+        </ng-container>
 
-        <div class="formulario__fila" *ngIf="pasoEjercicio === 2">
-          <div class="formulario__campo">
-            <label for="grupoMuscular">Grupo muscular</label>
-            <select id="grupoMuscular" name="grupoMuscular" [(ngModel)]="nuevoEjercicio.grupoMuscular">
-              <option *ngFor="let grupo of gruposMusculares" [value]="grupo">{{ grupo }}</option>
-            </select>
-          </div>
+        <ng-container *ngIf="pasoEjercicio === 2">
+          <div class="formulario__fila">
+            <div class="formulario__campo">
+              <label for="grupoMuscular">Grupo muscular</label>
+              <select id="grupoMuscular" name="grupoMuscular" [(ngModel)]="nuevoEjercicio.grupoMuscular">
+                <option *ngFor="let grupo of gruposMusculares" [value]="grupo">{{ grupo }}</option>
+              </select>
+            </div>
 
-          <div class="formulario__campo">
-            <label for="equipamiento">Equipamiento</label>
-            <select id="equipamiento" name="equipamiento" [(ngModel)]="nuevoEjercicio.equipamiento">
-              <option *ngFor="let equipo of equipamientos" [value]="equipo">{{ equipo }}</option>
-            </select>
-          </div>
+            <div class="formulario__campo">
+              <label for="equipamiento">Equipamiento</label>
+              <select id="equipamiento" name="equipamiento" [(ngModel)]="nuevoEjercicio.equipamiento">
+                <option *ngFor="let equipo of equipamientos" [value]="equipo">{{ equipo }}</option>
+              </select>
+            </div>
 
-          <div class="formulario__campo">
-            <label for="dificultad">Dificultad</label>
-            <select id="dificultad" name="dificultad" [(ngModel)]="nuevoEjercicio.dificultad">
-              <option *ngFor="let dificultad of dificultades" [value]="dificultad">{{ dificultad }}</option>
-            </select>
+            <div class="formulario__campo">
+              <label for="dificultad">Dificultad</label>
+              <select id="dificultad" name="dificultad" [(ngModel)]="nuevoEjercicio.dificultad">
+                <option *ngFor="let dificultad of dificultades" [value]="dificultad">{{ dificultad }}</option>
+              </select>
+            </div>
           </div>
-        </div>
+        </ng-container>
 
-        <div class="formulario__fila" *ngIf="pasoEjercicio === 3">
-          <div class="formulario__campo">
-            <label for="videoUrl">Video URL</label>
-            <input id="videoUrl" name="videoUrl" type="text" [(ngModel)]="nuevoEjercicio.videoUrl">
-          </div>
+        <ng-container *ngIf="pasoEjercicio === 3">
+          <div class="formulario__fila">
+            <div class="formulario__campo">
+              <label for="videoUrl">Video URL</label>
+              <input id="videoUrl" name="videoUrl" type="text" [(ngModel)]="nuevoEjercicio.videoUrl">
+            </div>
 
-          <div class="formulario__campo">
-            <label for="imagenUrl">Imagen URL</label>
-            <input id="imagenUrl" name="imagenUrl" type="text" [(ngModel)]="nuevoEjercicio.imagenUrl">
+            <div class="formulario__campo">
+              <label for="imagenUrl">Imagen URL</label>
+              <input id="imagenUrl" name="imagenUrl" type="text" [(ngModel)]="nuevoEjercicio.imagenUrl">
+            </div>
           </div>
-        </div>
+        </ng-container>
 
         <div class="formulario__acciones">
           <button class="btn btn--secundario" type="button" *ngIf="pasoEjercicio > 1" (click)="anteriorPasoEjercicio()">Anterior</button>

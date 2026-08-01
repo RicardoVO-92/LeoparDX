@@ -52,4 +52,8 @@ export class DashboardComponent {
     this.sidebarOpen.set(false);
   }
 
+  cerrarSesion() {
+    this.ruta.navigate(['/Login']);
+  }
+
 }

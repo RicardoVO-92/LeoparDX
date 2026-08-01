@@ -8,6 +8,7 @@ import {InicioComponent} from './componentes/Dashboard/inicio/Inicio';
 import { RutinasComponent } from './componentes/Dashboard/Rutinas/Rutinas';
 import { PerfilComponent } from './componentes/Dashboard/Perfil/Perfil';
 import { EjercicioComponent } from './componentes/Dashboard/Ejercicios/Ejercicio';
+import { AgendarCitasComponent } from './componentes/Dashboard/AgendarCitas/AgendarCitas';
 
 export const routes: Routes = [
     { path: '', component: componentInicio },
@@ -20,6 +21,7 @@ export const routes: Routes = [
         { path: 'inicio', component: InicioComponent },
         { path: 'rutinas', component: RutinasComponent },
         { path: 'perfil', component: PerfilComponent },
-        { path: 'ejercicios', component: EjercicioComponent}
+        { path: 'ejercicios', component: EjercicioComponent},
+        { path: 'agendarcitas', component: AgendarCitasComponent }
     ]},
 ];

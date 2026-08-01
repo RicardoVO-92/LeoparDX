@@ -181,6 +181,7 @@ export class PerfilComponent {
   mostrarFormularioPerfilFisico() {
     this.registrandoPerfilFisico = true;
     this.editandoPerfilFisico = true;
+    this.perfilFisico = new PerfilFisico();
   }
 
   cancelarEdicionUsuario() {

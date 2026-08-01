@@ -1,0 +1,88 @@
+<div class="agendar-citas">
+  <div class="agendar-citas__encabezado">
+    <div>
+      <h2 class="agendar-citas__titulo">Agendar Citas</h2>
+      <p class="agendar-citas__texto">Selecciona un día y hora para tu próxima visita al gimnasio.</p>
+    </div>
+    <button class="btn btn--claro" type="button" (click)="abrirModal()">
+      Agendar Cita
+    </button>
+  </div>
+
+  <div class="modal" *ngIf="modalAbierto">
+      <div class="modal__fondo" (click)="cerrarModal()"></div>
+      <div class="modal__contenido">
+        <div class="modal__encabezado">
+          <div>
+            <h2 class="card__title">Nueva Cita</h2>
+            <p class="modal__texto">Paso {{ paso }} de 2</p>
+          </div>
+          <button class="btn btn--secundario" type="button" (click)="cerrarModal()">Cerrar</button>
+        </div>
+
+        <div class="pasos">
+          <span class="pasos__item" [class.pasos__item--activo]="paso === 1">Día</span>
+          <span class="pasos__item" [class.pasos__item--activo]="paso === 2">Hora</span>
+        </div>
+
+        <form class="formulario" (ngSubmit)="agendarCita()">
+          <ng-container *ngIf="paso === 1">
+            <div class="formulario__campo">
+              <label for="fecha">Día</label>
+              <select id="fecha" name="fecha" [(ngModel)]="nuevaCita.fecha">
+                <option value="">Selecciona un día</option>
+                <option *ngFor="let dia of diasSemana" [value]="dia.toISOString()">{{ formatearFecha(dia) }}</option>
+              </select>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="paso === 2">
+            <div class="formulario__campo">
+              <label for="hora">Hora</label>
+              <select id="hora" name="hora" [(ngModel)]="nuevaCita.hora">
+                <option value="">Selecciona una hora</option>
+                <option *ngFor="let horario of horarios" [value]="horario">{{ horario }}</option>
+              </select>
+            </div>
+          </ng-container>
+
+          <div class="formulario__acciones">
+            <button class="btn btn--secundario" type="button" *ngIf="paso > 1" (click)="pasoAnterior()">Anterior</button>
+            <button class="btn btn--principal" type="button" *ngIf="paso < 2" (click)="siguientePaso()">Siguiente</button>
+            <button class="btn btn--principal" type="submit" *ngIf="paso === 2" [disabled]="guardandoCita">
+              {{ guardandoCita ? 'Agendando...' : 'Agendar Cita' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  <div class="card agendar-citas__card">
+    <h2 class="card__title">Mis Citas</h2>
+    <p class="agendar-citas__mensaje" *ngIf="cargandoCitas">Cargando citas...</p>
+    <p class="agendar-citas__mensaje" *ngIf="!cargandoCitas && citas.length === 0">No tienes citas agendadas.</p>
+
+    <div class="tabla" *ngIf="!cargandoCitas && citas.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cita of citas">
+            <td>{{ formatearFecha(cita.fechaHora) }}</td>
+            <td>{{ formatearHora(cita.fechaHora) }}</td>
+            <td>{{ cita.estado }}</td>
+            <td>
+              <button class="btn btn--secundario" (click)="cancelarCita(cita.id)">Cancelar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

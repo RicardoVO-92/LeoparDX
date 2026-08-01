@@ -1,3 +1,22 @@
+.rutina-en-ejecucion {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .rutinas {
   display: flex;
   flex-direction: column;
@@ -37,20 +56,41 @@
   border: 1px solid rgba(229, 231, 235, 0.9);
   box-shadow: 0 10px 25px rgba(17, 24, 39, 0.08);
   width: 100%;
+  padding: 24px;
+}
+
+.rutinas__card .card__title {
+  margin-bottom: 16px;
+}
+
+.rutinas__encabezado-card {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
 }
 
 .rutinas__mensaje {
-  color: #6b7280;
+  color: var(--une-muted);
   font-size: 14px;
   margin: 0;
+  padding: 16px;
+  text-align: center;
 }
 
 .rutinas__nota,
 .tabla__ayuda {
-  color: #6b7280;
+  color: var(--une-muted);
   display: block;
   font-size: 12px;
   margin: 4px 0 0;
+}
+
+.rutinas__descanso-general {
+  margin-bottom: 12px;
 }
 
 .descanso {
@@ -88,25 +128,8 @@
 .formulario__campo label,
 .formulario__check label,
 .dias__item {
-  color: #374151;
+  color: var(--une-texto);
   font-size: 14px;
-}
-
-.formulario__campo input,
-.formulario__campo select {
-  border: 1px solid var(--une-borde);
-  border-radius: 10px;
-  box-sizing: border-box;
-  font-size: 14px;
-  padding: 10px;
-  width: 100%;
-}
-
-.formulario__campo input:focus,
-.formulario__campo select:focus {
-  border-color: var(--une-magenta);
-  box-shadow: 0 0 0 3px rgba(192, 0, 106, 0.12);
-  outline: none;
 }
 
 .formulario__check {
@@ -134,37 +157,8 @@
   display: flex;
   gap: 10px;
   justify-content: flex-end;
-}
-
-.btn {
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  padding: 10px 14px;
-  transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
-  white-space: nowrap;
-}
-
-.btn:hover {
-  box-shadow: 0 8px 16px rgba(17, 24, 39, 0.14);
-  transform: translateY(-1px);
-}
-
-.btn:disabled {
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-.btn--principal {
-  background: var(--une-gradiente);
-  color: white;
-}
-
-.btn--secundario {
-  background: #f3f4f6;
-  color: var(--une-texto);
+  margin-top: 10px;
+  flex-wrap: wrap;
 }
 
 .btn--claro {
@@ -196,17 +190,17 @@
 .tabla {
   margin-top: 14px;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .tabla table {
   border-collapse: collapse;
-  min-width: 760px;
   width: 100%;
 }
 
 .tabla th,
 .tabla td {
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--une-borde);
   font-size: 14px;
   padding: 12px 10px;
   text-align: left;
@@ -221,7 +215,7 @@
   transition: background 0.15s;
 }
 
-.tabla tbody tr:hover {
+.tabla tbody tr:not(.ejercicio-titulo-fila):hover {
   background: #fafafa;
 }
 
@@ -246,6 +240,7 @@
   justify-content: center;
   position: fixed;
   z-index: 50;
+  padding: 16px;
 }
 
 .modal__fondo {
@@ -264,7 +259,7 @@
   overflow-y: auto;
   padding: 22px;
   position: relative;
-  width: calc(100% - 32px);
+  width: 100%;
 }
 
 .modal__encabezado {
@@ -273,6 +268,7 @@
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 16px;
+  flex-wrap: wrap;
 }
 
 .modal__texto {
@@ -283,14 +279,78 @@
 
 .tabla th {
   background: #f9fafb;
-  color: #374151;
+  color: var(--une-texto);
   font-weight: 600;
 }
 
+.ejercicio-titulo-fila td {
+  background-color: #f9fafb;
+  font-weight: bold;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  border-top: 2px solid var(--une-borde);
+}
+
+.descanso-fila td {
+  padding: 15px;
+  text-align: center;
+  border-bottom: 2px solid var(--une-borde);
+}
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .rutinas__encabezado {
+    padding: 16px;
+  }
+
+  .rutinas__titulo {
+    font-size: 22px;
+  }
+
+  .rutinas__card {
+    padding: 16px;
+  }
+
+  .formulario__fila {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .tabla table {
+    font-size: 13px;
+  }
+
+  .tabla th,
+  .tabla td {
+    padding: 10px 8px;
+  }
+
+  .tabla__input {
+    width: 70px;
+    font-size: 13px;
+  }
+}
+
+/* Móviles */
 @media (max-width: 768px) {
-  .rutinas__encabezado,
-  .modal__encabezado {
+  .rutinas__encabezado {
+    flex-direction: column;
     align-items: stretch;
+    padding: 16px;
+  }
+
+  .rutinas__titulo {
+    font-size: 20px;
+  }
+
+  .rutinas__texto {
+    font-size: 13px;
+  }
+
+  .rutinas__card {
+    padding: 16px;
+  }
+
+  .rutinas__encabezado-card {
     flex-direction: column;
   }
 
@@ -299,19 +359,107 @@
   }
 
   .formulario__acciones {
-    flex-direction: column;
+    justify-content: stretch;
+  }
+
+  .formulario__acciones .btn {
+    flex: 1;
   }
 
   .pasos {
     grid-template-columns: 1fr;
   }
 
+  .tabla {
+    overflow-x: auto;
+  }
+
+  .tabla table {
+    min-width: 100%;
+    font-size: 12px;
+  }
+
+  .tabla th,
+  .tabla td {
+    padding: 8px 6px;
+  }
+
   .tabla__input {
-    width: 78px;
+    width: 60px;
+    padding: 6px;
+    font-size: 12px;
   }
 
   .tabla td:last-child {
-    align-items: stretch;
     flex-direction: column;
+    align-items: stretch;
+  }
+
+  .tabla td:last-child .btn {
+    width: 100%;
+    padding: 8px 4px;
+    font-size: 12px;
+  }
+
+  .modal {
+    padding: 12px;
+  }
+
+  .modal__contenido {
+    max-height: calc(100vh - 24px);
+    padding: 16px;
+  }
+
+  .modal__encabezado {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* Teléfonos pequeños */
+@media (max-width: 480px) {
+  .rutinas__encabezado {
+    padding: 12px;
+  }
+
+  .rutinas__titulo {
+    font-size: 18px;
+  }
+
+  .rutinas__card {
+    padding: 12px;
+  }
+
+  .card__title {
+    font-size: 16px;
+  }
+
+  .tabla table {
+    font-size: 11px;
+  }
+
+  .tabla th,
+  .tabla td {
+    padding: 6px 4px;
+  }
+
+  .tabla__input {
+    width: 50px;
+    padding: 4px;
+    font-size: 11px;
+  }
+
+  .modal {
+    padding: 8px;
+  }
+
+  .modal__contenido {
+    padding: 12px;
+  }
+
+  .formulario__campo input,
+  .formulario__campo select,
+  .formulario__campo textarea {
+    font-size: 16px;
   }
 }
