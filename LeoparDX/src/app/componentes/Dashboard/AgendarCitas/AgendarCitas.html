@@ -9,8 +9,7 @@
     </button>
   </div>
 
-  @if (modalAbierto) {
-    <div class="modal">
+  <div class="modal" *ngIf="modalAbierto">
       <div class="modal__fondo" (click)="cerrarModal()"></div>
       <div class="modal__contenido">
         <div class="modal__encabezado">
@@ -27,82 +26,63 @@
         </div>
 
         <form class="formulario" (ngSubmit)="agendarCita()">
-          @if (paso === 1) {
+          <ng-container *ngIf="paso === 1">
             <div class="formulario__campo">
               <label for="fecha">Día</label>
               <select id="fecha" name="fecha" [(ngModel)]="nuevaCita.fecha">
                 <option value="">Selecciona un día</option>
-                @for (dia of diasSemana; track dia) {
-                  <option [value]="dia.toISOString()">{{ formatearFecha(dia) }}</option>
-                }
+                <option *ngFor="let dia of diasSemana" [value]="dia.toISOString()">{{ formatearFecha(dia) }}</option>
               </select>
             </div>
-          }
+          </ng-container>
 
-          @if (paso === 2) {
+          <ng-container *ngIf="paso === 2">
             <div class="formulario__campo">
               <label for="hora">Hora</label>
               <select id="hora" name="hora" [(ngModel)]="nuevaCita.hora">
                 <option value="">Selecciona una hora</option>
-                @for (horario of horarios; track horario) {
-                  <option [value]="horario">{{ horario }}</option>
-                }
+                <option *ngFor="let horario of horarios" [value]="horario">{{ horario }}</option>
               </select>
             </div>
-          }
+          </ng-container>
 
           <div class="formulario__acciones">
-            @if (paso > 1) {
-              <button class="btn btn--secundario" type="button" (click)="pasoAnterior()">Anterior</button>
-            }
-            @if (paso < 2) {
-              <button class="btn btn--principal" type="button" (click)="siguientePaso()">Siguiente</button>
-            }
-            @if (paso === 2) {
-              <button class="btn btn--principal" type="submit" [disabled]="guardandoCita">
-                {{ guardandoCita ? 'Agendando...' : 'Agendar Cita' }}
-              </button>
-            }
+            <button class="btn btn--secundario" type="button" *ngIf="paso > 1" (click)="pasoAnterior()">Anterior</button>
+            <button class="btn btn--principal" type="button" *ngIf="paso < 2" (click)="siguientePaso()">Siguiente</button>
+            <button class="btn btn--principal" type="submit" *ngIf="paso === 2" [disabled]="guardandoCita">
+              {{ guardandoCita ? 'Agendando...' : 'Agendar Cita' }}
+            </button>
           </div>
         </form>
       </div>
     </div>
-  }
 
   <div class="card agendar-citas__card">
     <h2 class="card__title">Mis Citas</h2>
-    @if (cargandoCitas) {
-      <p class="agendar-citas__mensaje">Cargando citas...</p>
-    }
-    @if (!cargandoCitas && citas.length === 0) {
-      <p class="agendar-citas__mensaje">No tienes citas agendadas.</p>
-    }
+    <p class="agendar-citas__mensaje" *ngIf="cargandoCitas">Cargando citas...</p>
+    <p class="agendar-citas__mensaje" *ngIf="!cargandoCitas && citas.length === 0">No tienes citas agendadas.</p>
 
-    @if (!cargandoCitas && citas.length > 0) {
-      <div class="tabla">
-        <table>
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Hora</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (cita of citas; track cita.id) {
-              <tr>
-                <td>{{ formatearFecha(cita.fechaHora) }}</td>
-                <td>{{ formatearHora(cita.fechaHora) }}</td>
-                <td>{{ cita.estado }}</td>
-                <td>
-                  <button class="btn btn--secundario" (click)="cancelarCita(cita.id)">Cancelar</button>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    }
+    <div class="tabla" *ngIf="!cargandoCitas && citas.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cita of citas">
+            <td>{{ formatearFecha(cita.fechaHora) }}</td>
+            <td>{{ formatearHora(cita.fechaHora) }}</td>
+            <td>{{ cita.estado }}</td>
+            <td>
+              <button class="btn btn--secundario" (click)="cancelarCita(cita.id)">Cancelar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

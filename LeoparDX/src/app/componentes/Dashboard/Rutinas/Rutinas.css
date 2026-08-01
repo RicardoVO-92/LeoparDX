@@ -63,6 +63,15 @@
   margin-bottom: 16px;
 }
 
+.rutinas__encabezado-card {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
 .rutinas__mensaje {
   color: var(--une-muted);
   font-size: 14px;
@@ -77,6 +86,10 @@
   display: block;
   font-size: 12px;
   margin: 4px 0 0;
+}
+
+.rutinas__descanso-general {
+    margin-bottom: 12px;
 }
 
 .descanso {

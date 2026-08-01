@@ -40,6 +40,8 @@ export class RutinasComponent {
   descansoInterval: any = null;
   pasoRutina: number = 1;
   modalRutina: boolean = false;
+  modalEjercicio: boolean = false;
+  ultimoEjercicioEntrenado: any = null;
 
   cargandoRutinas: boolean = false;
   cargandoEjercicios: boolean = false;
@@ -131,6 +133,14 @@ export class RutinasComponent {
   cerrarModalRutina() {
     this.modalRutina = false;
     this.pasoRutina = 1;
+  }
+
+  abrirModalEjercicio() {
+    this.modalEjercicio = true;
+  }
+
+  cerrarModalEjercicio() {
+    this.modalEjercicio = false;
   }
 
   anteriorPasoRutina() {
@@ -265,8 +275,9 @@ export class RutinasComponent {
     }, 1000);
   }
 
-  marcarSerie(serie: any) {
+  marcarSerie(serie: any, ejercicio: any) {
     serie.completado = !serie.completado;
+    this.ultimoEjercicioEntrenado = ejercicio;
   }
 
   async finalizarRutina() {
@@ -349,6 +360,7 @@ export class RutinasComponent {
 
       alert('Ejercicio agregado a la rutina');
       this.limpiarEjercicioRutina();
+      this.cerrarModalEjercicio();
     } catch (error) {
       console.log('Error al agregar ejercicio a la rutina', error);
       alert('Hubo un error al agregar el ejercicio');
