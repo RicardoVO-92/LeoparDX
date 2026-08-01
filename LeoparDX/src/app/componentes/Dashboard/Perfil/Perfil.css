@@ -18,18 +18,26 @@
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
+  flex-shrink: 0;
+}
+
+.perfil-info {
+  flex: 1;
+  min-width: 0;
 }
 
 .perfil-info h2 {
   margin: 0;
   font-size: 24px;
   font-weight: 600;
+  word-break: break-word;
 }
 
 .perfil-info p {
   margin: 0;
   font-size: 16px;
   color: #6b7280;
+  word-break: break-word;
 }
 
 .perfil-body {
@@ -52,6 +60,8 @@
   align-items: center;
   padding: 16px;
   border-bottom: 1px solid #e5e7eb;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .card-title {
@@ -65,6 +75,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  overflow-y: auto;
 }
 
 .perfil__mensaje {
@@ -83,6 +94,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .dato-label {
@@ -92,6 +105,7 @@
 
 .dato-valor {
   color: #6b7280;
+  text-align: right;
 }
 
 .perfil__sin-datos {
@@ -146,4 +160,125 @@
   gap: 10px;
   justify-content: flex-end;
   margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .perfil-header {
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .perfil-info h2 {
+    font-size: 20px;
+  }
+
+  .perfil-info p {
+    font-size: 14px;
+  }
+
+  .perfil-body {
+    gap: 16px;
+  }
+
+  .formulario__fila {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Móviles */
+@media (max-width: 768px) {
+  .perfil-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  .perfil-info {
+    width: 100%;
+  }
+
+  .perfil-info h2 {
+    font-size: 18px;
+  }
+
+  .perfil-info p {
+    font-size: 14px;
+  }
+
+  .perfil-body {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .card-header {
+    justify-content: flex-start;
+  }
+
+  .card-body {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .dato-item {
+    justify-content: space-between;
+  }
+
+  .dato-valor {
+    text-align: left;
+  }
+
+  .formulario__fila {
+    grid-template-columns: 1fr;
+  }
+
+  .formulario__acciones {
+    justify-content: stretch;
+  }
+
+  .formulario__acciones .btn {
+    flex: 1;
+  }
+}
+
+/* Teléfonos pequeños */
+@media (max-width: 480px) {
+  .perfil-header {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .perfil-avatar img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .perfil-info h2 {
+    font-size: 16px;
+  }
+
+  .card-header {
+    padding: 12px;
+  }
+
+  .card-title {
+    font-size: 16px;
+  }
+
+  .card-body {
+    padding: 12px;
+  }
+
+  .dato-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dato-valor {
+    text-align: left;
+    width: 100%;
+  }
 }
