@@ -15,6 +15,8 @@
   justify-content: space-between;
   padding: 22px;
   width: 100%;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
 .ejercicios__titulo {
@@ -79,6 +81,7 @@
 
 .formulario__campo textarea {
   resize: vertical;
+  font-family: inherit;
 }
 
 .formulario__campo input:focus,
@@ -99,6 +102,7 @@
   display: flex;
   gap: 10px;
   justify-content: flex-end;
+  flex-wrap: wrap;
 }
 
 .btn {
@@ -140,6 +144,7 @@
 
 .tabla {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .ejercicios__editar {
@@ -150,7 +155,6 @@
 
 .tabla table {
   border-collapse: collapse;
-  min-width: 760px;
   width: 100%;
 }
 
@@ -189,6 +193,7 @@
   justify-content: center;
   position: fixed;
   z-index: 50;
+  padding: 16px;
 }
 
 .modal__fondo {
@@ -205,7 +210,9 @@
   max-width: 720px;
   padding: 22px;
   position: relative;
-  width: calc(100% - 32px);
+  width: 100%;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
 }
 
 .modal__encabezado {
@@ -214,6 +221,7 @@
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 16px;
+  flex-wrap: wrap;
 }
 
 .modal__texto {
@@ -249,11 +257,42 @@
   margin: 0;
 }
 
-@media (max-width: 768px) {
-  .ejercicios__encabezado,
-  .modal__encabezado {
-    align-items: stretch;
+/* Tablets */
+@media (max-width: 1024px) {
+  .ejercicios__encabezado {
     flex-direction: column;
+    align-items: stretch;
+    padding: 16px;
+  }
+
+  .ejercicios__titulo {
+    font-size: 22px;
+  }
+
+  .formulario__fila {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .tabla table {
+    font-size: 13px;
+  }
+
+  .tabla th,
+  .tabla td {
+    padding: 10px 8px;
+  }
+}
+
+/* Móviles */
+@media (max-width: 768px) {
+  .ejercicios__encabezado {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px;
+  }
+
+  .ejercicios__titulo {
+    font-size: 20px;
   }
 
   .formulario__fila {
@@ -261,15 +300,91 @@
   }
 
   .formulario__acciones {
-    flex-direction: column;
+    justify-content: stretch;
+  }
+
+  .formulario__acciones .btn {
+    flex: 1;
   }
 
   .pasos {
     grid-template-columns: 1fr;
   }
 
+  .tabla {
+    overflow-x: auto;
+  }
+
+  .tabla table {
+    min-width: 100%;
+    font-size: 12px;
+  }
+
+  .tabla th,
+  .tabla td {
+    padding: 8px 6px;
+  }
+
   .tabla td:last-child {
-    align-items: stretch;
     flex-direction: column;
+    align-items: stretch;
+  }
+
+  .tabla td:last-child .btn {
+    width: 100%;
+    padding: 8px 4px;
+    font-size: 12px;
+  }
+
+  .modal {
+    padding: 12px;
+  }
+
+  .modal__contenido {
+    max-height: calc(100vh - 24px);
+    padding: 16px;
+  }
+
+  .modal__encabezado {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .card {
+    padding: 12px;
+  }
+}
+
+/* Teléfonos pequeños */
+@media (max-width: 480px) {
+  .ejercicios__encabezado {
+    padding: 12px;
+  }
+
+  .ejercicios__titulo {
+    font-size: 18px;
+  }
+
+  .tabla table {
+    font-size: 11px;
+  }
+
+  .tabla th,
+  .tabla td {
+    padding: 6px 4px;
+  }
+
+  .modal {
+    padding: 8px;
+  }
+
+  .modal__contenido {
+    padding: 12px;
+  }
+
+  .formulario__campo input,
+  .formulario__campo select,
+  .formulario__campo textarea {
+    font-size: 16px;
   }
 }
