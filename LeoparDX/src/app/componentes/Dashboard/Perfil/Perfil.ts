@@ -6,6 +6,7 @@ import { addDoc, collection, collectionData, doc, Firestore, limit, query, updat
 import { Usuario } from '../../../models/usuario.model';
 import { PerfilFisico } from '../../../models/perfil-fisico.model';
 import { DashboardComponent } from '../Dashboard';
+import { AlertaService } from '../../Servicios/alertaservicios';
 
 @Component({
   selector: 'Perfil',
@@ -19,6 +20,7 @@ export class PerfilComponent {
   private firestore: Firestore = inject(Firestore);
   private plataformId = inject(PLATFORM_ID);
   private dashboard = inject(DashboardComponent);
+  private alerta: AlertaService = inject(AlertaService);
 
   usuario: any = new Usuario();
   perfilFisico: any = new PerfilFisico();
@@ -126,11 +128,11 @@ export class PerfilComponent {
         email: this.usuario.email
       });
 
-      alert('Perfil actualizado con exito');
+      this.alerta.exito('Perfil actualizado exitosamente');
       this.editandoUsuario = false;
     } catch (error) {
       console.log('Error al actualizar usuario', error);
-      alert('Hubo un error al actualizar el perfil');
+      this.alerta.error('Hubo un error al actualizar el perfil');
     }
   }
 
@@ -140,7 +142,7 @@ export class PerfilComponent {
     }
 
     if (this.perfilFisico.peso === '' || this.perfilFisico.altura === '') {
-      alert('Peso y altura son obligatorios');
+      this.alerta.error('Peso y altura son obligatorios');
       return;
     }
 
@@ -169,12 +171,12 @@ export class PerfilComponent {
         });
       }
 
-      alert('Perfil fisico guardado con exito');
+      this.alerta.exito('Perfil fisico guardado exitosamente');
       this.editandoPerfilFisico = false;
       this.registrandoPerfilFisico = false;
     } catch (error) {
       console.log('Error al guardar perfil fisico', error);
-      alert('Hubo un error al guardar el perfil fisico');
+      this.alerta.error('Hubo un error al guardar el perfil fisico');
     }
   }
 

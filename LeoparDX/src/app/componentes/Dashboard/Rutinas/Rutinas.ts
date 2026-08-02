@@ -9,6 +9,7 @@ import { Rutina } from '../../../models/rutina.model';
 import { EjercicioRutina } from '../../../models/ejercicio-rutina.model';
 import { HistorialEjercicio } from '../../../models';
 import { Timestamp } from '@angular/fire/firestore';
+import { AlertaService } from '../../Servicios/alertaservicios';
 
 @Component({
   selector: 'Rutinas',
@@ -22,6 +23,7 @@ export class RutinasComponent {
   private firestore: Firestore = inject(Firestore);
   private plataformId = inject(PLATFORM_ID);
   private dashboard = inject(DashboardComponent);
+  private alerta: AlertaService = inject(AlertaService);
 
   usuario: any = new Usuario();
   nuevaRutina: any = new Rutina();
@@ -151,12 +153,12 @@ export class RutinasComponent {
 
   async crearRutina() {
     if (!this.usuario.uid) {
-      alert('No se encontro el usuario');
+      this.alerta.error('No se encontro el usuario');
       return;
     }
 
     if (!this.nuevaRutina.nombre || !this.nuevaRutina.descripcion) {
-      alert('Nombre y descripcion son obligatorios');
+      this.alerta.error('Nombre y descripcion son obligatorios');
       return;
     }
 
@@ -185,12 +187,12 @@ export class RutinasComponent {
         id: res.id
       });
 
-      alert('Rutina creada con exito');
+      this.alerta.exito('Rutina creada exitosamente');
       this.limpiarRutina();
       this.cerrarModalRutina();
     } catch (error) {
       console.log('Error al crear rutina', error);
-      alert('Hubo un error al crear la rutina');
+      this.alerta.error('Hubo un error al crear la rutina');
     }
 
     this.guardandoRutina = false;
@@ -222,7 +224,12 @@ export class RutinasComponent {
       this.ejerciciosRutina = data.sort((a, b) => Number(a.orden || 0) - Number(b.orden || 0));
       this.nuevoEjercicioRutina.orden = this.ejerciciosRutina.length + 1;
       if (this.rutinaIniciada) {
-        this.prepararEntrenamiento();
+        if (this.ejerciciosRutina.length === 0) {
+          this.rutinaIniciada = false;
+          this.alerta.info('No ha agregado ejercicios a su rutina');
+        } else {
+          this.prepararEntrenamiento();
+        }
       }
       this.cargandoEjercicios = false;
     }, (error: any) => {
@@ -286,7 +293,7 @@ export class RutinasComponent {
     }
   
     if (this.entrenamientoActual.length === 0) {
-      alert('No hay ejercicios para guardar');
+      this.alerta.info('No ha agregado ejercicios a su rutina');
       return;
     }
   
@@ -317,12 +324,12 @@ export class RutinasComponent {
   
       await batch.commit();
   
-      alert('Rutina finalizada con éxito');
+      this.alerta.felicidades('Has completado tu rutina, sigue asi!');
       this.rutinaIniciada = false;
       this.entrenamientoActual = [];
     } catch (error) {
       console.log('Error al finalizar rutina', error);
-      alert('Hubo un error al finalizar la rutina');
+      this.alerta.error('Hubo un error al finalizar la rutina');
     }
   
     this.guardandoEntrenamiento = false;
@@ -330,12 +337,12 @@ export class RutinasComponent {
 
   async agregarEjercicioRutina() {
     if (!this.rutinaSeleccionada || !this.rutinaSeleccionada.id) {
-      alert('Selecciona una rutina');
+      this.alerta.error('Selecciona una rutina');
       return;
     }
 
     if (!this.nuevoEjercicioRutina.ejercicioId) {
-      alert('Selecciona un ejercicio');
+      this.alerta.error('Selecciona un ejercicio');
       return;
     }
 
@@ -358,12 +365,12 @@ export class RutinasComponent {
         id: res.id
       });
 
-      alert('Ejercicio agregado a la rutina');
+      this.alerta.exito('Ejercicio agregado a la rutina exitosamente');
       this.limpiarEjercicioRutina();
       this.cerrarModalEjercicio();
     } catch (error) {
       console.log('Error al agregar ejercicio a la rutina', error);
-      alert('Hubo un error al agregar el ejercicio');
+      this.alerta.error('Hubo un error al agregar el ejercicio');
     }
 
     this.guardandoEjercicio = false;

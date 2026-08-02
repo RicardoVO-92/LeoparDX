@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { addDoc, collection, collectionData, doc, Firestore, updateDoc } from '@angular/fire/firestore';
 import { Subscription } from 'rxjs';
 import { CatalogoEjercicio } from '../../../models/catalogo-ejercicio.model';
+import { AlertaService } from '../../Servicios/alertaservicios';
 
 @Component({
   selector: 'Ejercicios',
@@ -15,6 +16,7 @@ import { CatalogoEjercicio } from '../../../models/catalogo-ejercicio.model';
 export class EjercicioComponent implements OnDestroy {
   private firestore: Firestore = inject(Firestore);
   private ejerciciosSubscription?: Subscription;
+  private alerta: AlertaService = inject(AlertaService);
 
   ejercicios: CatalogoEjercicio[] = [];
   nuevoEjercicio: CatalogoEjercicio = new CatalogoEjercicio();
@@ -64,7 +66,7 @@ export class EjercicioComponent implements OnDestroy {
 
   async agregarEjercicio() {
     if (!this.nuevoEjercicio.nombre || !this.nuevoEjercicio.descripcion) {
-      alert('El nombre y la descripcion son obligatorios');
+      this.alerta.error('El nombre y la descripcion son obligatorios');
       return;
     }
 
@@ -84,12 +86,12 @@ export class EjercicioComponent implements OnDestroy {
         activo: true
       });
 
-      alert('Ejercicio registrado con exito');
+      this.alerta.exito('Ejercicio creado exitosamente');
       this.limpiarFormulario();
       this.cerrarModalEjercicio();
     } catch (error) {
       console.log('Error al registrar ejercicio', error);
-      alert('Hubo un error al registrar el ejercicio');
+      this.alerta.error('Hubo un error al registrar el ejercicio');
     }
 
     this.guardando = false;
@@ -100,7 +102,7 @@ export class EjercicioComponent implements OnDestroy {
       return;
     }
 
-    const confirmar = confirm('Quieres eliminar este ejercicio de la tabla?');
+    const confirmar = await this.alerta.confirmar('Quieres eliminar este ejercicio de la tabla?');
 
     if (!confirmar) {
       return;
@@ -111,9 +113,10 @@ export class EjercicioComponent implements OnDestroy {
       await updateDoc(ejercicioDoc, {
         activo: false
       });
+      this.alerta.exito('Ejercicio eliminado exitosamente');
     } catch (error) {
       console.log('Error al eliminar ejercicio', error);
-      alert('Hubo un error al eliminar el ejercicio');
+      this.alerta.error('Hubo un error al eliminar el ejercicio');
     }
   }
 
@@ -128,7 +131,7 @@ export class EjercicioComponent implements OnDestroy {
     }
 
     if (!this.ejercicioEditando.nombre || !this.ejercicioEditando.descripcion) {
-      alert('El nombre y la descripcion son obligatorios');
+      this.alerta.error('El nombre y la descripcion son obligatorios');
       return;
     }
 
@@ -145,11 +148,11 @@ export class EjercicioComponent implements OnDestroy {
         imagenUrl: this.ejercicioEditando.imagenUrl
       });
 
-      alert('Ejercicio actualizado con exito');
+      this.alerta.exito('Ejercicio actualizado exitosamente');
       this.cancelarEdicion();
     } catch (error) {
       console.log('Error al actualizar ejercicio', error);
-      alert('Hubo un error al actualizar el ejercicio');
+      this.alerta.error('Hubo un error al actualizar el ejercicio');
     }
   }
 

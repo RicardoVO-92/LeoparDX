@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms'
 import { CommonModule } from '@angular/common';
 import { addDoc, collection, doc, Firestore, updateDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+import { AlertaService } from '../Servicios/alertaservicios';
 
 @Component({
   selector: 'register',
@@ -19,7 +20,7 @@ export class registerComponent {
 
   private firestore: Firestore = inject(Firestore);
 
-  constructor(public router: Router){}
+  constructor(public router: Router, private alerta: AlertaService){}
 
   regresarMain(){
     this.router.navigate(['/Login']);
@@ -35,7 +36,7 @@ export class registerComponent {
 
   async registrarUsuario() {
     if (!this.coincidirContrasena) {
-      alert('Las contrasenas no coinciden');
+      this.alerta.error('Las contrasenas no coinciden');
       return;
     }
 
@@ -64,13 +65,13 @@ export class registerComponent {
       });
 
       console.log('Usuario registrado con ID: ', res.id);
-      alert('Usuario registrado con exito');
+      this.alerta.exito('Usuario creado exitosamente');
 
       this.regresarMain();
 
     } catch (error) {
       console.error('Error al registrar en Firebase:', error);
-      alert('Hubo un error al intentar registrar al usuario.');
+      this.alerta.error('Hubo un error al intentar registrar al usuario.');
     }
   }
 }

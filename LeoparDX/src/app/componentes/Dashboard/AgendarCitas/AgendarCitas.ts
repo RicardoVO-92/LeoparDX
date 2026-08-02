@@ -5,6 +5,7 @@ import { addDoc, collection, collectionData, deleteDoc, doc, Firestore, getDocs,
 import { DashboardComponent } from '../Dashboard';
 import { Usuario } from '../../../models/usuario.model';
 import { Cita } from '../../../models/cita.model';
+import { AlertaService } from '../../Servicios/alertaservicios';
 
 @Component({
   selector: 'agendar-citas',
@@ -17,6 +18,7 @@ export class AgendarCitasComponent {
   private firestore: Firestore = inject(Firestore);
   private platformId = inject(PLATFORM_ID);
   private dashboard = inject(DashboardComponent);
+  private alerta: AlertaService = inject(AlertaService);
 
   usuario: any = new Usuario();
   nuevaCita: any = {
@@ -105,7 +107,7 @@ export class AgendarCitasComponent {
 
   async agendarCita() {
     if (!this.nuevaCita.fecha || !this.nuevaCita.hora) {
-      alert('Debes seleccionar un día y una hora.');
+      this.alerta.error('Debes seleccionar un dia y una hora');
       return;
     }
 
@@ -131,12 +133,12 @@ export class AgendarCitasComponent {
         creadoEn: Timestamp.now()
       });
 
-      alert('Cita agendada con éxito.');
+      this.alerta.exito('Cita agendada exitosamente');
       this.nuevaCita = { fecha: '', hora: '' };
 
     } catch (error) {
       console.error('Error al agendar la cita:', error);
-      alert('Hubo un error al agendar la cita.');
+      this.alerta.error('Hubo un error al agendar la cita');
     }
 
     this.guardandoCita = false;
@@ -151,7 +153,7 @@ export class AgendarCitasComponent {
     });
 
     if (yaAgendadaEnDia) {
-      alert('Ya tienes una cita agendada para este día.');
+      this.alerta.info('Ya tienes una cita agendada para este dia');
       return false;
     }
 
@@ -170,7 +172,7 @@ export class AgendarCitasComponent {
 
     const snapshot = await getDocs(q);
     if (snapshot.size >= this.limitePorHorario) {
-      alert('El horario seleccionado ya está lleno.');
+      this.alerta.info('El horario seleccionado ya esta lleno');
       return false;
     }
 
@@ -178,17 +180,18 @@ export class AgendarCitasComponent {
   }
 
   async cancelarCita(id: string) {
-    if (!confirm('¿Estás seguro de que quieres cancelar esta cita?')) {
+    const confirmado = await this.alerta.confirmar('Estas seguro de que quieres cancelar esta cita?');
+    if (!confirmado) {
       return;
     }
 
     try {
       const citaDoc = doc(this.firestore, 'Cita', id);
       await deleteDoc(citaDoc);
-      alert('Cita cancelada con éxito.');
+      this.alerta.exito('Cita cancelada exitosamente');
     } catch (error) {
       console.error('Error al cancelar la cita:', error);
-      alert('Hubo un error al cancelar la cita.');
+      this.alerta.error('Hubo un error al cancelar la cita');
     }
   }
 
