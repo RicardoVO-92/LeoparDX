@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { collection, collectionData, doc, Firestore, query, where, limit, updateDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Usuario } from '../../models/usuario.model';
+import { AlertaService } from '../Servicios/alertaservicios';
 
 @Component({
   selector: 'login',
@@ -19,7 +20,7 @@ export class LoginComponent {
 
   user: Usuario = new Usuario();
 
-  constructor(public ruta: Router) {
+  constructor(public ruta: Router, private alerta: AlertaService) {
 
   }
     irRegistrar(){
@@ -28,6 +29,11 @@ export class LoginComponent {
   
 
   loginGYM() {
+    if (!this.user.email || !this.user.password) {
+      this.alerta.error('Ingresa tu usuario y contrasena', 'Datos incompletos');
+      return;
+    }
+
     const usersCollection = collection(this.firestore, 'Usuarios');
 
     const q = query(usersCollection, where('email', '==', this.user.email), limit(1));
@@ -51,13 +57,14 @@ export class LoginComponent {
 
           this.ruta.navigate(['/Dashboard'], { state: { uid: this.user.uid } });
         } else {
-
+          this.alerta.error('Usuario o contrasena invalido');
         }
       } else {
-
+        this.alerta.error('Usuario o contrasena invalido');
       }
     }, (err:any) => {
       console.log('Login query error', err);
+      this.alerta.error('Ocurrio un error al iniciar sesion, intenta de nuevo');
     });
   }
 
