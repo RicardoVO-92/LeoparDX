@@ -4,59 +4,73 @@
   padding: 0;
 }
 
+/* NAVBAR */
 .navCard {
   display: flex;
   align-items: center;
   height: 60px;
   width: 100%;
   background: linear-gradient(90deg, #C0006A 0%, #7B1FA2 50%, #2E3192 100%);
-  padding: 0 30px;  /* Espacio entre DIVs en los lados */
+  padding: 0 30px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
 }
 
 .navBar {
   display: flex;
   align-items: center;
   gap: 12px;
-  width: 100%;  /* ← ocupa todo el ancho disponible */
+  width: 100%;
 }
 
 .fontNav {
-    font-family: 'Roboto', sans-serif;
-    font-size: 17px;
-    text-transform: uppercase;
-    color: #FFFFFF;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.navBar a:hover {
-  transform: scale(1.05);        /* un poco más grande */
-  font-weight: 700;              /* bold */
-  cursor: pointer;               
-  transition: transform 0.2s;   /* animación suave */
+  font-family: 'Roboto', sans-serif;
+  font-size: 15px;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  white-space: nowrap;
+  margin: 0;
+  padding: 0;
 }
 
 .navBar a {
-  text-decoration: none;  /* quita el subrayado */
-  color: inherit;         /* hereda el color del padre */
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s, font-weight 0.2s;
 }
 
+.navBar a:hover {
+  transform: scale(1.05);
+  font-weight: 700;
+}
+
+/* HERO SECTION */
 .fondoLogin {
-  height: 100%;
+  height: auto;
   width: 100%;
-  position: relative; /* para posicionar la máscara */
+  position: relative;
   background-image: url('/images/gymUne.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  box-sizing: border-box;
 }
 
-/* La máscara de color encima de la imagen */
 .fondoLogin::before {
   content: '';
   position: absolute;
-  inset: 0;  /* cubre todo */
+  inset: 0;
   background: linear-gradient(135deg, 
     rgba(192, 0, 106, 0.6) 0%, 
     rgba(123, 31, 162, 0.5) 50%, 
@@ -65,8 +79,471 @@
   z-index: 0;
 }
 
-/* Importante: el contenido debe estar por encima de la máscara */
 .fondoLogin > * {
   position: relative;
   z-index: 1;
+}
+
+.mainContent {
+  text-align: center;
+  color: white;
+  max-width: 700px;
+}
+
+.mainContent h1 {
+  font-size: 48px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.mainContent p {
+  font-size: 20px;
+  margin-bottom: 32px;
+  opacity: 0.95;
+  line-height: 1.6;
+}
+
+.mainButtons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.mainBtn {
+  padding: 14px 32px;
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+  font-family: 'Nunito Sans', sans-serif;
+  white-space: nowrap;
+}
+
+.mainBtnPrimary {
+  background: var(--une-gradiente);
+  color: white;
+}
+
+.mainBtnSecondary {
+  background: rgba(255, 255, 255, 0.25);
+  color: white;
+  border: 2px solid white;
+}
+
+.mainBtn:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.mainBtn:active {
+  transform: translateY(0);
+}
+
+/* FEATURES SECTION */
+.featuresSection {
+  background: white;
+  padding: 60px 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.featuresTitle {
+  text-align: center;
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--une-azul);
+  margin-bottom: 48px;
+  text-transform: uppercase;
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.featureCard {
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 32px 24px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.featureCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.featureIcon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.featureCard h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--une-azul);
+  margin-bottom: 12px;
+  margin: 0 0 12px 0;
+}
+
+.featureCard p {
+  font-size: 14px;
+  color: var(--une-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* GALLERY SECTION */
+.gallerySection {
+  background: #f3f4f6;
+  padding: 60px 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.galleryTitle {
+  text-align: center;
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--une-azul);
+  margin-bottom: 48px;
+  text-transform: uppercase;
+}
+
+.galleryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.galleryItem {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  aspect-ratio: 1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.galleryItem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+  display: block;
+}
+
+.galleryItem:hover img {
+  transform: scale(1.05);
+}
+
+.galleryOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+  color: white;
+  font-weight: 700;
+  text-align: center;
+  padding: 20px;
+}
+
+.galleryItem:hover .galleryOverlay {
+  opacity: 1;
+}
+
+/* CTA SECTION */
+.ctaSection {
+  background: var(--une-gradiente);
+  padding: 60px 20px;
+  width: 100%;
+  text-align: center;
+  color: white;
+  box-sizing: border-box;
+}
+
+.ctaSection h2 {
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+
+.ctaSection p {
+  font-size: 18px;
+  margin-bottom: 32px;
+  opacity: 0.95;
+}
+
+.ctaButton {
+  display: inline-block;
+  padding: 14px 40px;
+  background: white;
+  color: var(--une-azul);
+  font-weight: 700;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-size: 14px;
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+.ctaButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* FOOTER */
+.footer {
+  background: #1f2937;
+  color: white;
+  padding: 40px 20px;
+  text-align: center;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.footer p {
+  margin: 8px 0;
+}
+
+/* ========== RESPONSIVE ========== */
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .navCard {
+    padding: 0 20px;
+  }
+
+  .fontNav {
+    font-size: 14px;
+  }
+
+  .mainContent h1 {
+    font-size: 40px;
+  }
+
+  .mainContent p {
+    font-size: 18px;
+  }
+
+  .featuresTitle,
+  .galleryTitle {
+    font-size: 28px;
+  }
+
+  .featureCard {
+    padding: 24px 20px;
+  }
+
+  .featureCard h3 {
+    font-size: 18px;
+  }
+
+  .galleryGrid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
+/* Móviles */
+@media (max-width: 768px) {
+  .navCard {
+    height: 50px;
+    padding: 0 16px;
+  }
+
+  .fontNav {
+    font-size: 12px;
+  }
+
+  .fondoLogin {
+    min-height: 70vh;
+    padding: 30px 16px;
+  }
+
+  .mainContent h1 {
+    font-size: 32px;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+
+  .mainContent p {
+    font-size: 16px;
+    margin-bottom: 24px;
+  }
+
+  .mainButtons {
+    gap: 12px;
+  }
+
+  .mainBtn {
+    padding: 12px 24px;
+    font-size: 13px;
+  }
+
+  .featuresSection,
+  .gallerySection,
+  .ctaSection {
+    padding: 40px 16px;
+  }
+
+  .featuresTitle,
+  .galleryTitle,
+  .ctaSection h2 {
+    font-size: 24px;
+    margin-bottom: 32px;
+  }
+
+  .featuresGrid {
+    gap: 16px;
+  }
+
+  .featureCard {
+    padding: 20px 16px;
+  }
+
+  .featureCard h3 {
+    font-size: 16px;
+  }
+
+  .featureCard p {
+    font-size: 13px;
+  }
+
+  .featureIcon {
+    font-size: 40px;
+  }
+
+  .galleryGrid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+  }
+
+  .ctaSection p {
+    font-size: 16px;
+  }
+
+  .ctaButton {
+    padding: 12px 32px;
+    font-size: 12px;
+  }
+
+  .footer {
+    padding: 30px 16px;
+    font-size: 12px;
+  }
+}
+
+/* Teléfonos pequeños */
+@media (max-width: 480px) {
+  .navCard {
+    height: 48px;
+    padding: 0 12px;
+  }
+
+  .fontNav {
+    font-size: 11px;
+  }
+
+  .fondoLogin {
+    min-height: 60vh;
+    padding: 20px 12px;
+  }
+
+  .mainContent h1 {
+    font-size: 24px;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+
+  .mainContent p {
+    font-size: 14px;
+    margin-bottom: 18px;
+  }
+
+  .mainButtons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .mainBtn {
+    width: 100%;
+    padding: 11px 20px;
+    font-size: 12px;
+  }
+
+  .featuresSection,
+  .gallerySection,
+  .ctaSection {
+    padding: 30px 12px;
+  }
+
+  .featuresTitle,
+  .galleryTitle,
+  .ctaSection h2 {
+    font-size: 20px;
+    margin-bottom: 24px;
+  }
+
+  .featuresGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .featureCard {
+    padding: 18px 14px;
+  }
+
+  .featureCard h3 {
+    font-size: 15px;
+  }
+
+  .featureCard p {
+    font-size: 12px;
+  }
+
+  .featureIcon {
+    font-size: 36px;
+  }
+
+  .galleryGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .ctaSection p {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .ctaButton {
+    padding: 10px 24px;
+    font-size: 11px;
+  }
+
+  .footer {
+    padding: 24px 12px;
+    font-size: 11px;
+  }
 }

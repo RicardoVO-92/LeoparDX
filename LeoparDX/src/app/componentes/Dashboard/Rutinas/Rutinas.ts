@@ -301,7 +301,7 @@ export class RutinasComponent {
   
     try {
       const batch = writeBatch(this.firestore);
-      const historialCollection = collection(this.firestore, `usuarios/${this.usuario.uid}/historial`);
+      const historialCollection = collection(this.firestore, `Usuarios/${this.usuario.uid}/historial`);
   
       this.entrenamientoActual.forEach(ejercicio => {
         const volumen = ejercicio.series.reduce((acc: any, serie: any) => acc + (serie.peso * serie.repeticiones), 0);

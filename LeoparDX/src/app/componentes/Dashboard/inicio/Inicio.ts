@@ -35,7 +35,7 @@ export class InicioComponent implements OnInit {
   async cargarHistorial() {
     if (!this.usuario.uid) return;
 
-    const historialCollection = collection(this.firestore, `usuarios/${this.usuario.uid}/historial`);
+    const historialCollection = collection(this.firestore, `Usuarios/${this.usuario.uid}/historial`);
     const q = query(historialCollection, orderBy('fecha', 'desc'));
     const querySnapshot = await getDocs(q);
 
