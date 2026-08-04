@@ -30,7 +30,7 @@
       </div>
 
       <form class="formulario" (ngSubmit)="agregarEjercicio()">
-        <ng-container *ngIf="pasoEjercicio === 1">
+        <div *ngIf="pasoEjercicio === 1">
           <div>
             <div class="formulario__campo">
               <label for="nombre">Nombre</label>
@@ -42,9 +42,9 @@
               <textarea id="descripcion" name="descripcion" rows="4" [(ngModel)]="nuevoEjercicio.descripcion"></textarea>
             </div>
           </div>
-        </ng-container>
+        </div>
 
-        <ng-container *ngIf="pasoEjercicio === 2">
+        <div *ngIf="pasoEjercicio === 2">
           <div class="formulario__fila">
             <div class="formulario__campo">
               <label for="grupoMuscular">Grupo muscular</label>
@@ -67,9 +67,9 @@
               </select>
             </div>
           </div>
-        </ng-container>
+        </div>
 
-        <ng-container *ngIf="pasoEjercicio === 3">
+        <div *ngIf="pasoEjercicio === 3">
           <div class="formulario__fila">
             <div class="formulario__campo">
               <label for="videoUrl">Video URL</label>
@@ -81,7 +81,7 @@
               <input id="imagenUrl" name="imagenUrl" type="text" [(ngModel)]="nuevoEjercicio.imagenUrl">
             </div>
           </div>
-        </ng-container>
+        </div>
 
         <div class="formulario__acciones">
           <button class="btn btn--secundario" type="button" *ngIf="pasoEjercicio > 1" (click)="anteriorPasoEjercicio()">Anterior</button>

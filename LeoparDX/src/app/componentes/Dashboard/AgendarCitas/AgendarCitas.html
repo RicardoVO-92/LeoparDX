@@ -26,7 +26,7 @@
         </div>
 
         <form class="formulario" (ngSubmit)="agendarCita()">
-          <ng-container *ngIf="paso === 1">
+          <div *ngIf="paso === 1">
             <div class="formulario__campo">
               <label for="fecha">Día</label>
               <select id="fecha" name="fecha" [(ngModel)]="nuevaCita.fecha">
@@ -34,9 +34,9 @@
                 <option *ngFor="let dia of diasSemana" [value]="dia.toISOString()">{{ formatearFecha(dia) }}</option>
               </select>
             </div>
-          </ng-container>
+          </div>
 
-          <ng-container *ngIf="paso === 2">
+          <div *ngIf="paso === 2">
             <div class="formulario__campo">
               <label for="hora">Hora</label>
               <select id="hora" name="hora" [(ngModel)]="nuevaCita.hora">
@@ -44,7 +44,7 @@
                 <option *ngFor="let horario of horarios" [value]="horario">{{ horario }}</option>
               </select>
             </div>
-          </ng-container>
+          </div>
 
           <div class="formulario__acciones">
             <button class="btn btn--secundario" type="button" *ngIf="paso > 1" (click)="pasoAnterior()">Anterior</button>

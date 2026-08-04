@@ -76,7 +76,7 @@
       </div>
 
       <form class="formulario" (ngSubmit)="crearRutina()">
-        <ng-container *ngIf="pasoRutina === 1">
+        <div *ngIf="pasoRutina === 1">
           <div class="formulario__fila">
             <div class="formulario__campo">
               <label for="nombre">Nombre</label>
@@ -88,9 +88,9 @@
               <input id="descripcion" name="descripcion" type="text" [(ngModel)]="nuevaRutina.descripcion">
             </div>
           </div>
-        </ng-container>
+        </div>
 
-        <ng-container *ngIf="pasoRutina === 2">
+        <div *ngIf="pasoRutina === 2">
           <div class="formulario__fila">
             <div class="formulario__campo">
               <label for="objetivo">Objetivo</label>
@@ -124,9 +124,9 @@
               <input id="pesoMaxKg" name="pesoMaxKg" type="number" [(ngModel)]="nuevaRutina.pesoMaxKg">
             </div>
           </div>
-        </ng-container>
+        </div>
 
-        <ng-container *ngIf="pasoRutina === 3">
+        <div *ngIf="pasoRutina === 3">
           <div class="formulario__campo">
             <label>Dias de la semana</label>
             <div class="dias">
@@ -143,7 +143,7 @@
               Publica
             </label>
           </div>
-        </ng-container>
+        </div>
 
         <div class="formulario__acciones">
           <button class="btn btn--secundario" type="button" *ngIf="pasoRutina > 1" (click)="anteriorPasoRutina()">Anterior</button>
@@ -157,7 +157,7 @@
     </div>
   </div>
 
-  <ng-container *ngIf="!rutinaIniciada">
+  <div *ngIf="!rutinaIniciada">
     <div class="rutinas__encabezado">
       <div>
         <h2 class="rutinas__titulo">Rutinas</h2>
@@ -242,23 +242,21 @@
         </table>
       </div>
     </div>
-  </ng-container>
+  </div>
 
   <div class="rutina-en-ejecucion" *ngIf="rutinaIniciada">
     <div class="card rutinas__card">
       <h2 class="card__title">Rutina iniciada: {{ rutinaSeleccionada.nombre }}</h2>
       <p class="rutinas__mensaje" *ngIf="entrenamientoActual.length === 0">Esta rutina no tiene ejercicios para iniciar.</p>
 
-      <div *ngIf="descansoActivo; else descansoAlternativo" class="descanso">
+      <div *ngIf="descansoActivo" class="descanso">
         <p>Descanso: {{ descansoSegundos }} segundos</p>
       </div>
-      <ng-template #descansoAlternativo>
-        <div class="rutinas__descanso-general" *ngIf="ultimoEjercicioEntrenado">
-          <button class="btn btn--secundario" type="button" (click)="iniciarDescanso(ultimoEjercicioEntrenado)">
-            Descansar {{ ultimoEjercicioEntrenado.descansoPlaneado }}s
-          </button>
-        </div>
-      </ng-template>
+      <div class="rutinas__descanso-general" *ngIf="!descansoActivo && ultimoEjercicioEntrenado">
+        <button class="btn btn--secundario" type="button" (click)="iniciarDescanso(ultimoEjercicioEntrenado)">
+          Descansar {{ ultimoEjercicioEntrenado.descansoPlaneado }}s
+        </button>
+      </div>
 
       <div class="tabla" *ngIf="entrenamientoActual.length > 0">
         <table>
@@ -272,7 +270,7 @@
             </tr>
           </thead>
           <tbody>
-            <ng-container *ngFor="let ejercicio of entrenamientoActual; let i = index">
+            <div *ngFor="let ejercicio of entrenamientoActual; let i = index">
               <tr class="ejercicio-titulo-fila">
                 <td>
                   <strong>{{ i + 1}}. {{ ejercicio.nombre }}</strong>
@@ -298,7 +296,7 @@
                   </button>
                 </td>
               </tr>
-            </ng-container>
+            </div>
           </tbody>
         </table>
       </div>
