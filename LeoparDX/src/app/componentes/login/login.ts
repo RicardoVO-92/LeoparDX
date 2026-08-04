@@ -23,10 +23,14 @@ export class LoginComponent {
   constructor(public ruta: Router, private alerta: AlertaService) {
 
   }
-    irRegistrar(){
+
+  irRegistrar(){
     this.ruta.navigate(['/Register']);
   }
-  
+
+  inicio() {
+    this.ruta.navigate(['/Home'])
+  }
 
   loginGYM() {
     if (!this.user.email || !this.user.password) {
@@ -42,20 +46,26 @@ export class LoginComponent {
 
       if (data && data.length > 0) {
 
-        const item = data[0];
+        const datosUsuario = data[0];
 
-        if (item.password === this.user.password) {
-          this.user.uid = item.uid || item.id;
+        if (datosUsuario.password === this.user.password) {
+          this.user.uid = datosUsuario.uid || datosUsuario.id;
 
-          if (!item.uid && item.id) {
-            const usuarioDoc = doc(this.firestore, 'Usuarios', item.id);
+          if (!datosUsuario.uid && datosUsuario.id) {
+            const usuarioDoc = doc(this.firestore, 'Usuarios', datosUsuario.id);
 
             await updateDoc(usuarioDoc, {
-              uid: item.id
+              uid: datosUsuario.id
             });
           }
 
-          this.ruta.navigate(['/Dashboard'], { state: { uid: this.user.uid } });
+          this.alerta.exito('Inicio de sesión correcto', 'Bienvenido');
+
+          if (datosUsuario.admin === true) {
+            this.ruta.navigate(['/AdminPanel'], { state: { uid: this.user.uid } });
+          } else {
+            this.ruta.navigate(['/Dashboard'], { state: { uid: this.user.uid } });
+          }
         } else {
           this.alerta.error('Usuario o contrasena invalido');
         }

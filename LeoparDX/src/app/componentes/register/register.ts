@@ -23,7 +23,7 @@ export class registerComponent {
   constructor(public router: Router, private alerta: AlertaService){}
 
   regresarMain(){
-    this.router.navigate(['/Login']);
+    this.router.navigate(['/Home']);
   }
 
   verificarcontrasena() {
@@ -43,7 +43,7 @@ export class registerComponent {
     try {
       const claseColeccion = collection(this.firestore, 'Usuarios');
 
-      const res = await addDoc(claseColeccion, {
+      const nuevoRegistro = await addDoc(claseColeccion, {
         nombre: this.nuevoUsuario.nombre,
         apellido: this.nuevoUsuario.apellido,
         nombreUsuario: this.nuevoUsuario.nombreUsuario,
@@ -58,16 +58,16 @@ export class registerComponent {
         telefono: ''
       });
 
-      const usuarioDoc = doc(this.firestore, 'Usuarios', res.id);
+      const usuarioDoc = doc(this.firestore, 'Usuarios', nuevoRegistro.id);
 
       await updateDoc(usuarioDoc, {
-        uid: res.id
+        uid: nuevoRegistro.id
       });
 
-      console.log('Usuario registrado con ID: ', res.id);
+      console.log('Usuario registrado con ID: ', nuevoRegistro.id);
       this.alerta.exito('Usuario creado exitosamente');
 
-      this.regresarMain();
+      this.router.navigate(['/Dashboard'], { state: { uid: nuevoRegistro.id } });
 
     } catch (error) {
       console.error('Error al registrar en Firebase:', error);

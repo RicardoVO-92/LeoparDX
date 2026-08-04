@@ -159,3 +159,42 @@
 .btnUNE1:hover {
   opacity: 0.85;
 }
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.button-group button {
+  padding: 10px 32px;
+  background: linear-gradient(90deg, #C0006A, #2E3192);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  max-width: 160px;
+}
+
+.button-group button:hover {
+    background-color: #374654;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.button-group button:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.mainBtnSecondary {
+  background: rgba(255, 255, 255, 0.25);
+  color: white;
+  border: 2px solid white;
+}

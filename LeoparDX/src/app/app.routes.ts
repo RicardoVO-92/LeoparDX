@@ -9,6 +9,7 @@ import { RutinasComponent } from './componentes/Dashboard/Rutinas/Rutinas';
 import { PerfilComponent } from './componentes/Dashboard/Perfil/Perfil';
 import { EjercicioComponent } from './componentes/Dashboard/Ejercicios/Ejercicio';
 import { AgendarCitasComponent } from './componentes/Dashboard/AgendarCitas/AgendarCitas';
+import { AdminPanelComponent } from './componentes/AdminPanel/AdminPanel';
 
 export const routes: Routes = [
     { path: '', component: componentInicio },
@@ -24,4 +25,5 @@ export const routes: Routes = [
         { path: 'ejercicios', component: EjercicioComponent},
         { path: 'agendarcitas', component: AgendarCitasComponent }
     ]},
+    { path: 'AdminPanel', component: AdminPanelComponent },
 ];

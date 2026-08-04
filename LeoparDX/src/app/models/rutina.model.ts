@@ -1,7 +1,6 @@
 import { Timestamp } from '@angular/fire/firestore';
 import { EjercicioRutina } from './ejercicio-rutina.model';
 
-// Colección: rutinas/{id}
 export class Rutina {
   id: string = '';
   nombre: string = '';
@@ -12,11 +11,9 @@ export class Rutina {
   publica: boolean = false;
   pesoMinKg: number = 0;
   pesoMaxKg: number = 0;
-  creadoPor: string = '';       // uid del usuario que la creó
-  asignadoA: string = '';       // uid del alumno (si es personalizada)
-  diasSemana: string[] = [];    // ['lunes', 'miércoles', 'viernes']
+  creadoPor: string = '';       
+  asignadoA: string = '';     
+  diasSemana: string[] = [];   
   creadoEn: Timestamp = Timestamp.now();
-
-  // No se guarda en Firestore — se llena al consultar la subcolección
   ejercicios: EjercicioRutina[] = [];
 }

@@ -1,0 +1,46 @@
+<div class="admin-panel">
+  <div class="admin-panel__header">
+    <div>
+      <h2>Panel de administración</h2>
+      <p>Usuarios registrados y citas de hoy</p>
+    </div>
+    <button class="admin-panel__button" (click)="volverLogin()">Salir</button>
+  </div>
+
+  <div class="admin-panel__card">
+    <h3>Citas de hoy</h3>
+
+    <div class="admin-panel__list" *ngIf="resumenPorHorario.length > 0">
+      <div class="admin-panel__item admin-panel__item--horario" *ngFor="let item of resumenPorHorario">
+        <div>
+          <strong>{{ item.horario }}</strong>
+          <p>{{ item.cantidad }} citas registradas</p>
+        </div>
+        <span class="admin-panel__badge" [class.admin-panel__badge--full]="item.cantidad >= item.limite">
+          {{ item.cantidad }}/{{ item.limite }}
+        </span>
+      </div>
+    </div>
+
+    <p class="admin-panel__empty" *ngIf="resumenPorHorario.length === 0">No hay citas para hoy.</p>
+
+
+    <p class="admin-panel__empty" *ngIf="citasDelDia.length === 0">No hay citas para hoy.</p>
+  </div>
+
+  <div class="admin-panel__card">
+    <h3>Personas registradas</h3>
+
+    <div class="admin-panel__list" *ngIf="usuariosRegistrados.length > 0">
+      <div class="admin-panel__item" *ngFor="let usuario of usuariosRegistrados">
+        <div>
+          <strong>{{ usuario.nombre || 'Sin nombre' }}</strong>
+          <p>{{ usuario.email || 'Sin correo' }}</p>
+        </div>
+        <span>{{ formatFecha(usuario.creadoEn) }}</span>
+      </div>
+    </div>
+
+    <p class="admin-panel__empty" *ngIf="usuariosRegistrados.length === 0">No hay usuarios registrados.</p>
+  </div>
+</div>

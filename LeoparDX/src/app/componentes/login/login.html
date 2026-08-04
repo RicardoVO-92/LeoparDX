@@ -8,15 +8,16 @@
     <div class="glassCard">
 
       <label class="labelUNE" for="email">Usuario</label>
-      <input class="inputUNE" type="email" id="email" name="email"
-             placeholder="Email" [(ngModel)]="user.email">
+      <input class="inputUNE" type="email" id="email" name="email" placeholder="Email" [(ngModel)]="user.email">
 
       <label class="labelUNE" for="password">Contraseña</label>
-      <input class="inputUNE" type="password" id="password" name="password"
-             placeholder="Contraseña" [(ngModel)]="user.password">
-
-      <button class="btnUNE" type="button" (click)="loginGYM()">Entrar</button>
-
+      <input class="inputUNE" type="password" id="password" name="password" placeholder="Contraseña" [(ngModel)]="user.password">
+        
+        
+      <div class="button-group">
+        <button class="mainBtnSecondary" type="button" (click)="inicio()">Inicio</button>
+        <button class="btnUNE" type="button" (click)="loginGYM()">Entrar</button>
+      </div>
     </div>
   </div>
 

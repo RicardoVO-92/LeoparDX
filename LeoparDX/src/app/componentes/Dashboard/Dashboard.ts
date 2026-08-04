@@ -5,6 +5,7 @@ import { collection, collectionData, Firestore, query, where, limit } from '@ang
 import { Router } from '@angular/router';
 import { Usuario } from '../../models/usuario.model';
 import { RouterModule } from '@angular/router';
+import { AlertaService } from '../Servicios/alertaservicios';
 
 @Component({
   selector: 'dashboard',
@@ -24,7 +25,7 @@ export class DashboardComponent {
 
   sidebarOpen = signal(false);
   
-  constructor(public ruta: Router) {
+  constructor(public ruta: Router, private alerta: AlertaService) {
 
     if (isPlatformBrowser(this.plataformId)) {
       const state = history.state as Usuario;
@@ -53,7 +54,12 @@ export class DashboardComponent {
   }
 
   cerrarSesion() {
-    this.ruta.navigate(['/Login']);
+    this.alerta.confirmar('¿Deseas cerrar sesión?', 'Cerrar sesión').then((confirmado) => {
+      if (confirmado) {
+        this.alerta.info('Se cerró la sesión correctamente', 'Hasta pronto');
+        this.ruta.navigate(['/Home']);
+      }
+    });
   }
 
 }
