@@ -119,30 +119,30 @@ export class PerfilComponent {
     });
   }
 
-  async guardarUsuario() {
+  guardarUsuario() {
     if (!this.usuarioDocId) {
       return;
     }
 
-    try {
-      const usuarioDoc = doc(this.firestore, 'Usuarios', this.usuarioDocId);
+    const usuarioDoc = doc(this.firestore, 'Usuarios', this.usuarioDocId);
 
-      await updateDoc(usuarioDoc, {
-        nombre: this.usuario.nombre,
-        apellido: this.usuario.apellido,
-        nombreUsuario: this.usuario.nombreUsuario,
-        email: this.usuario.email
+    updateDoc(usuarioDoc, {
+      nombre: this.usuario.nombre,
+      apellido: this.usuario.apellido,
+      nombreUsuario: this.usuario.nombreUsuario,
+      email: this.usuario.email
+    })
+      .then(() => {
+        this.alerta.exito('Perfil actualizado exitosamente');
+        this.editandoUsuario = false;
+      })
+      .catch((error) => {
+        console.log('Error al actualizar usuario', error);
+        this.alerta.error('Hubo un error al actualizar el perfil');
       });
-
-      this.alerta.exito('Perfil actualizado exitosamente');
-      this.editandoUsuario = false;
-    } catch (error) {
-      console.log('Error al actualizar usuario', error);
-      this.alerta.error('Hubo un error al actualizar el perfil');
-    }
   }
 
-  async guardarPerfilFisico() {
+  guardarPerfilFisico() {
     if (!this.usuarioDocId) {
       return;
     }
@@ -152,37 +152,49 @@ export class PerfilComponent {
       return;
     }
 
-    try {
-      const perfilCollection = collection(this.firestore, 'Usuarios', this.usuarioDocId, 'perfil-fisico');
+    const perfilCollection = collection(this.firestore, 'Usuarios', this.usuarioDocId, 'perfil-fisico');
 
-      const perfil = {
-        peso: this.perfilFisico.peso,
-        altura: this.perfilFisico.altura,
-        objetivo: this.perfilFisico.objetivo,
-        nivelActividad: this.perfilFisico.nivelActividad
-      };
+    const perfil = {
+      peso: this.perfilFisico.peso,
+      altura: this.perfilFisico.altura,
+      objetivo: this.perfilFisico.objetivo,
+      nivelActividad: this.perfilFisico.nivelActividad
+    };
 
-      if (this.tienePerfilFisico && this.perfilFisicoDocId) {
-        const perfilDoc = doc(this.firestore, 'Usuarios', this.usuarioDocId, 'perfil-fisico', this.perfilFisicoDocId);
-        await updateDoc(perfilDoc, perfil);
-      } else {
-        const crearPerfil = await addDoc(perfilCollection, {
-          perfil,
-          registradoEn: new Date()
-        });
-
-        const perfilDoc = doc(this.firestore, 'Usuarios', this.usuarioDocId, 'perfil-fisico', crearPerfil.id);
-        await updateDoc(perfilDoc, {
-          id: crearPerfil.id
-        });
-      }
-
+    const finalizarGuardado = () => {
       this.alerta.exito('Perfil fisico guardado exitosamente');
       this.editandoPerfilFisico = false;
       this.registrandoPerfilFisico = false;
-    } catch (error) {
-      console.log('Error al guardar perfil fisico', error);
-      this.alerta.error('Hubo un error al guardar el perfil fisico');
+    };
+
+    if (this.tienePerfilFisico && this.perfilFisicoDocId) {
+      const perfilDoc = doc(this.firestore, 'Usuarios', this.usuarioDocId, 'perfil-fisico', this.perfilFisicoDocId);
+      updateDoc(perfilDoc, perfil)
+        .then(() => {
+          finalizarGuardado();
+        })
+        .catch((error) => {
+          console.log('Error al guardar perfil fisico', error);
+          this.alerta.error('Hubo un error al guardar el perfil fisico');
+        });
+    } else {
+      addDoc(perfilCollection, {
+        perfil,
+        registradoEn: new Date()
+      })
+        .then((crearPerfil) => {
+          const perfilDoc = doc(this.firestore, 'Usuarios', this.usuarioDocId, 'perfil-fisico', crearPerfil.id);
+          return updateDoc(perfilDoc, {
+            id: crearPerfil.id
+          });
+        })
+        .then(() => {
+          finalizarGuardado();
+        })
+        .catch((error) => {
+          console.log('Error al guardar perfil fisico', error);
+          this.alerta.error('Hubo un error al guardar el perfil fisico');
+        });
     }
   }
 

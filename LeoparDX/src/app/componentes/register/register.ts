@@ -34,45 +34,43 @@ export class registerComponent {
     }
   }
 
-  async registrarUsuario() {
+  registrarUsuario() {
     if (!this.coincidirContrasena) {
       this.alerta.error('Las contrasenas no coinciden');
       return;
     }
 
-    try {
-      const claseColeccion = collection(this.firestore, 'Usuarios');
+    const claseColeccion = collection(this.firestore, 'Usuarios');
 
-      const nuevoRegistro = await addDoc(claseColeccion, {
-        nombre: this.nuevoUsuario.nombre,
-        apellido: this.nuevoUsuario.apellido,
-        nombreUsuario: this.nuevoUsuario.nombreUsuario,
-        email: this.nuevoUsuario.email,
-        password: this.nuevoUsuario.password,
-        Activo: false,
-        actualizadoEn: new Date(),
-        creadoEn: new Date(),
-        fechaNacimiento: new Date(),
-        fotoUrl: '',
-        rol: 'alumno',
-        telefono: ''
+    addDoc(claseColeccion, {
+      nombre: this.nuevoUsuario.nombre,
+      apellido: this.nuevoUsuario.apellido,
+      nombreUsuario: this.nuevoUsuario.nombreUsuario,
+      email: this.nuevoUsuario.email,
+      password: this.nuevoUsuario.password,
+      Activo: false,
+      actualizadoEn: new Date(),
+      creadoEn: new Date(),
+      fechaNacimiento: new Date(),
+      fotoUrl: '',
+      rol: 'alumno',
+      telefono: ''
+    })
+      .then((nuevoRegistro) => {
+        const usuarioDoc = doc(this.firestore, 'Usuarios', nuevoRegistro.id);
+        return updateDoc(usuarioDoc, {
+          uid: nuevoRegistro.id
+        }).then(() => nuevoRegistro.id);
+      })
+      .then((nuevoId) => {
+        console.log('Usuario registrado con ID: ', nuevoId);
+        this.alerta.exito('Usuario creado exitosamente');
+        this.router.navigate(['/Dashboard'], { state: { uid: nuevoId } });
+      })
+      .catch((error) => {
+        console.error('Error al registrar en Firebase:', error);
+        this.alerta.error('Hubo un error al intentar registrar al usuario.');
       });
-
-      const usuarioDoc = doc(this.firestore, 'Usuarios', nuevoRegistro.id);
-
-      await updateDoc(usuarioDoc, {
-        uid: nuevoRegistro.id
-      });
-
-      console.log('Usuario registrado con ID: ', nuevoRegistro.id);
-      this.alerta.exito('Usuario creado exitosamente');
-
-      this.router.navigate(['/Dashboard'], { state: { uid: nuevoRegistro.id } });
-
-    } catch (error) {
-      console.error('Error al registrar en Firebase:', error);
-      this.alerta.error('Hubo un error al intentar registrar al usuario.');
-    }
   }
 }
 

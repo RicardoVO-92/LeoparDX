@@ -65,7 +65,7 @@ export class EjercicioComponent implements OnDestroy {
     });
   }
 
-  async agregarEjercicio() {
+  agregarEjercicio() {
     if (!this.nuevoEjercicio.nombre || !this.nuevoEjercicio.descripcion) {
       this.alerta.error('El nombre y la descripcion son obligatorios');
       return;
@@ -73,29 +73,30 @@ export class EjercicioComponent implements OnDestroy {
 
     this.guardando = true;
 
-    try {
-      const ejerciciosCollection = collection(this.firestore, 'Catalogo_ejercicios');
+    const ejerciciosCollection = collection(this.firestore, 'Catalogo_ejercicios');
 
-      await addDoc(ejerciciosCollection, {
-        nombre: this.nuevoEjercicio.nombre,
-        descripcion: this.nuevoEjercicio.descripcion,
-        grupoMuscular: this.nuevoEjercicio.grupoMuscular,
-        equipamiento: this.nuevoEjercicio.equipamiento,
-        dificultad: this.nuevoEjercicio.dificultad,
-        videoUrl: this.nuevoEjercicio.videoUrl,
-        imagenUrl: this.nuevoEjercicio.imagenUrl,
-        activo: true
+    addDoc(ejerciciosCollection, {
+      nombre: this.nuevoEjercicio.nombre,
+      descripcion: this.nuevoEjercicio.descripcion,
+      grupoMuscular: this.nuevoEjercicio.grupoMuscular,
+      equipamiento: this.nuevoEjercicio.equipamiento,
+      dificultad: this.nuevoEjercicio.dificultad,
+      videoUrl: this.nuevoEjercicio.videoUrl,
+      imagenUrl: this.nuevoEjercicio.imagenUrl,
+      activo: true
+    })
+      .then(() => {
+        this.alerta.exito('Ejercicio creado exitosamente');
+        this.limpiarFormulario();
+        this.cerrarModalEjercicio();
+      })
+      .catch((error) => {
+        console.log('Error al registrar ejercicio', error);
+        this.alerta.error('Hubo un error al registrar el ejercicio');
+      })
+      .finally(() => {
+        this.guardando = false;
       });
-
-      this.alerta.exito('Ejercicio creado exitosamente');
-      this.limpiarFormulario();
-      this.cerrarModalEjercicio();
-    } catch (error) {
-      console.log('Error al registrar ejercicio', error);
-      this.alerta.error('Hubo un error al registrar el ejercicio');
-    }
-
-    this.guardando = false;
   }
 
   async eliminarEjercicio(ejercicio: CatalogoEjercicio) {
@@ -129,7 +130,7 @@ export class EjercicioComponent implements OnDestroy {
     this.ejercicioEditando = copiaEjercicio;
   }
 
-  async actualizarEjercicio() {
+  actualizarEjercicio() {
     if (!this.ejercicioEditando.id) {
       return;
     }
@@ -139,25 +140,25 @@ export class EjercicioComponent implements OnDestroy {
       return;
     }
 
-    try {
-      const ejercicioDoc = doc(this.firestore, 'Catalogo_ejercicios', this.ejercicioEditando.id);
+    const ejercicioDoc = doc(this.firestore, 'Catalogo_ejercicios', this.ejercicioEditando.id);
 
-      await updateDoc(ejercicioDoc, {
-        nombre: this.ejercicioEditando.nombre,
-        descripcion: this.ejercicioEditando.descripcion,
-        grupoMuscular: this.ejercicioEditando.grupoMuscular,
-        equipamiento: this.ejercicioEditando.equipamiento,
-        dificultad: this.ejercicioEditando.dificultad,
-        videoUrl: this.ejercicioEditando.videoUrl,
-        imagenUrl: this.ejercicioEditando.imagenUrl
+    updateDoc(ejercicioDoc, {
+      nombre: this.ejercicioEditando.nombre,
+      descripcion: this.ejercicioEditando.descripcion,
+      grupoMuscular: this.ejercicioEditando.grupoMuscular,
+      equipamiento: this.ejercicioEditando.equipamiento,
+      dificultad: this.ejercicioEditando.dificultad,
+      videoUrl: this.ejercicioEditando.videoUrl,
+      imagenUrl: this.ejercicioEditando.imagenUrl
+    })
+      .then(() => {
+        this.alerta.exito('Ejercicio actualizado exitosamente');
+        this.cancelarEdicion();
+      })
+      .catch((error) => {
+        console.log('Error al actualizar ejercicio', error);
+        this.alerta.error('Hubo un error al actualizar el ejercicio');
       });
-
-      this.alerta.exito('Ejercicio actualizado exitosamente');
-      this.cancelarEdicion();
-    } catch (error) {
-      console.log('Error al actualizar ejercicio', error);
-      this.alerta.error('Hubo un error al actualizar el ejercicio');
-    }
   }
 
   cancelarEdicion() {
