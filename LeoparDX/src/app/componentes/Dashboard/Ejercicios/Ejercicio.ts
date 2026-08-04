@@ -14,6 +14,7 @@ import { AlertaService } from '../../Servicios/alertaservicios';
   styleUrls: ['./Ejercicio.css']
 })
 export class EjercicioComponent implements OnDestroy {
+
   private firestore: Firestore = inject(Firestore);
   private ejerciciosSubscription?: Subscription;
   private alerta: AlertaService = inject(AlertaService);
@@ -37,23 +38,23 @@ export class EjercicioComponent implements OnDestroy {
 
   obtenerEjercicios() {
     this.cargando = true;
-
+    
     const ejerciciosCollection = collection(this.firestore, 'Catalogo_ejercicios');
 
     this.ejerciciosSubscription = collectionData(ejerciciosCollection, { idField: 'id' }).subscribe((data: any[]) => {
       this.ejercicios = data
-        .filter((item) => item.activo !== false)
-        .map((item) => {
+        .filter((ejercicio) => ejercicio.activo !== false)
+        .map((campo) => {
           const ejercicio = new CatalogoEjercicio();
-          ejercicio.id = item.id || '';
-          ejercicio.nombre = item.nombre || '';
-          ejercicio.descripcion = item.descripcion || '';
-          ejercicio.grupoMuscular = item.grupoMuscular || 'pecho';
-          ejercicio.equipamiento = item.equipamiento || 'sin equipo';
-          ejercicio.dificultad = item.dificultad || 'baja';
-          ejercicio.videoUrl = item.videoUrl || '';
-          ejercicio.imagenUrl = item.imagenUrl || '';
-          ejercicio.activo = item.activo !== false;
+          ejercicio.id = campo.id || '';
+          ejercicio.nombre = campo.nombre || '';
+          ejercicio.descripcion = campo.descripcion || '';
+          ejercicio.grupoMuscular = campo.grupoMuscular || 'pecho';
+          ejercicio.equipamiento = campo.equipamiento || 'sin equipo';
+          ejercicio.dificultad = campo.dificultad || 'baja';
+          ejercicio.videoUrl = campo.videoUrl || '';
+          ejercicio.imagenUrl = campo.imagenUrl || '';
+          ejercicio.activo = campo.activo !== false;
           return ejercicio;
         });
 
@@ -121,8 +122,11 @@ export class EjercicioComponent implements OnDestroy {
   }
 
   editarEjercicio(ejercicio: CatalogoEjercicio) {
+    const copiaEjercicio = new CatalogoEjercicio();
+    copiaEjercicio.setData(ejercicio);
+
     this.editandoEjercicio = true;
-    this.ejercicioEditando = Object.assign(new CatalogoEjercicio(), ejercicio);
+    this.ejercicioEditando = copiaEjercicio;
   }
 
   async actualizarEjercicio() {

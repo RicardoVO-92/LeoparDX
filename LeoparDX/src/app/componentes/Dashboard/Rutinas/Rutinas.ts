@@ -25,9 +25,9 @@ export class RutinasComponent {
   private dashboard = inject(DashboardComponent);
   private alerta: AlertaService = inject(AlertaService);
 
-  usuario: any = new Usuario();
-  nuevaRutina: any = new Rutina();
-  nuevoEjercicioRutina: any = new EjercicioRutina();
+  usuario = new Usuario();
+  nuevaRutina = new Rutina();
+  nuevoEjercicioRutina= new EjercicioRutina();
 
   rutinas: any[] = [];
   ejerciciosCatalogo: any[] = [];
@@ -59,7 +59,7 @@ export class RutinasComponent {
   constructor() {
     this.nuevaRutina.nivel = 'intermedio';
     this.nuevaRutina.objetivo = 'perder peso';
-    this.nuevaRutina.tipo = 'predefinida';
+    this.nuevaRutina.tipo = 'personalizada';
     this.nuevaRutina.publica = false;
     this.nuevaRutina.pesoMinKg = 0;
     this.nuevaRutina.pesoMaxKg = 0;
@@ -117,7 +117,7 @@ export class RutinasComponent {
     if (seleccionado) {
       this.diasSeleccionados.push(dia);
     } else {
-      this.diasSeleccionados = this.diasSeleccionados.filter((item) => item !== dia);
+      this.diasSeleccionados = this.diasSeleccionados.filter((diaDesSeleccionado) => diaDesSeleccionado !== dia);
     }
   }
 
@@ -175,8 +175,8 @@ export class RutinasComponent {
         tipo: this.nuevaRutina.tipo,
         publica: this.nuevaRutina.publica,
         diasSemana: this.diasSeleccionados,
-        pesoMinKg: Number(this.nuevaRutina.pesoMinKg || 0),
-        pesoMaxKg: Number(this.nuevaRutina.pesoMaxKg || 0),
+        pesoMinKg: this.nuevaRutina.pesoMinKg || 0,
+        pesoMaxKg: this.nuevaRutina.pesoMaxKg || 0,
         asignadoA: this.usuario.uid,
         creadoPor: this.usuario.uid,
         creado: new Date()
@@ -212,30 +212,43 @@ export class RutinasComponent {
   }
 
   obtenerEjerciciosRutina() {
-    if (!this.rutinaSeleccionada || !this.rutinaSeleccionada.id) {
+    if (!this.rutinaSeleccionada?.id) {
       return;
     }
 
     this.cargandoEjercicios = true;
 
-    const ejerciciosRutinaCollection = collection(this.firestore, 'Rutina', this.rutinaSeleccionada.id, 'Ejercicio-Rutina');
+    const rutinasSubcoleccion = collection(this.firestore, 'Rutina', this.rutinaSeleccionada.id, 'Ejercicio-Rutina');
 
-    collectionData(ejerciciosRutinaCollection, { idField: 'id' }).subscribe((data: any[]) => {
-      this.ejerciciosRutina = data.sort((a, b) => Number(a.orden || 0) - Number(b.orden || 0));
-      this.nuevoEjercicioRutina.orden = this.ejerciciosRutina.length + 1;
-      if (this.rutinaIniciada) {
-        if (this.ejerciciosRutina.length === 0) {
-          this.rutinaIniciada = false;
-          this.alerta.info('No ha agregado ejercicios a su rutina');
-        } else {
-          this.prepararEntrenamiento();
-        }
+    collectionData(rutinasSubcoleccion, { idField: 'id' }).subscribe(
+      (ejerciciosObtenidos: any[]) => {
+        this.ejerciciosRutina = this.ordenarEjerciciosPorOrden(ejerciciosObtenidos);
+        this.nuevoEjercicioRutina.orden = this.ejerciciosRutina.length + 1;
+        
+        this.validarYPrepararEntrenamiento();
+        this.cargandoEjercicios = false;
+      },(error: any) => {
+        console.error('Error al obtener ejercicios de rutina:', error);
+        this.cargandoEjercicios = false;
       }
-      this.cargandoEjercicios = false;
-    }, (error: any) => {
-      console.log('Error al obtener ejercicios de rutina', error);
-      this.cargandoEjercicios = false;
-    });
+    );
+  }
+
+  ordenarEjerciciosPorOrden(ejercicios: any[]) {
+    return ejercicios.sort((ejercicio1, ejercicio2) => 
+      Number(ejercicio1.orden || 0) - Number(ejercicio2.orden || 0)
+    );
+  }
+
+  validarYPrepararEntrenamiento() {
+    if (!this.rutinaIniciada) return;
+
+    if (this.ejerciciosRutina.length === 0) {
+      this.rutinaIniciada = false;
+      this.alerta.info('No ha agregado ejercicios a su rutina');
+    } else {
+      this.prepararEntrenamiento();
+    }
   }
 
   iniciarRutina(rutina: any) {
@@ -268,7 +281,7 @@ export class RutinasComponent {
 
     this.descansoActivo = true;
     this.descansoEjercicioId = ejercicio.ejercicioRutinaId;
-    this.descansoSegundos = Number(ejercicio.descansoPlaneado || 60);
+    this.descansoSegundos = ejercicio.descansoPlaneado || 60;
 
     this.descansoInterval = setInterval(() => {
       this.descansoSegundos = this.descansoSegundos - 1;
@@ -288,51 +301,69 @@ export class RutinasComponent {
   }
 
   async finalizarRutina() {
-    if (!this.rutinaSeleccionada || !this.rutinaSeleccionada.id) {
+    if (!this.rutinaSeleccionada?.id) {
       return;
     }
-  
+
     if (this.entrenamientoActual.length === 0) {
       this.alerta.info('No ha agregado ejercicios a su rutina');
       return;
     }
-  
+
     this.guardandoEntrenamiento = true;
-  
+
     try {
-      const batch = writeBatch(this.firestore);
-      const historialCollection = collection(this.firestore, `Usuarios/${this.usuario.uid}/historial`);
-  
-      this.entrenamientoActual.forEach(ejercicio => {
-        const volumen = ejercicio.series.reduce((acc: any, serie: any) => acc + (serie.peso * serie.repeticiones), 0);
-  
-        const historial: HistorialEjercicio = {
-          id: '',
-          fecha: Timestamp.now(),
-          rutinaId: this.rutinaSeleccionada.id,
-          rutinaNombre: this.rutinaSeleccionada.nombre,
-          ejercicioId: ejercicio.ejercicioId,
-          ejercicioNombre: ejercicio.nombre,
-          series: ejercicio.series.map((s: any) => ({ peso: s.peso, repeticiones: s.repeticiones })),
-          volumen: volumen
-        };
-  
-        const docRef = doc(historialCollection);
-        historial.id = docRef.id;
-        batch.set(docRef, historial);
+      const GuardarDocumentos = writeBatch(this.firestore);
+      const historialColeccion = collection(this.firestore, `Usuarios/${this.usuario.uid}/historial`);
+
+      this.entrenamientoActual.forEach(ejercicioEntrenamiento => {
+        const registroHistorial = this.crearRegistroHistorial(ejercicioEntrenamiento);
+        const referenciaDocumento = doc(historialColeccion);
+        
+        registroHistorial.id = referenciaDocumento.id;
+        GuardarDocumentos.set(referenciaDocumento, registroHistorial);
       });
-  
-      await batch.commit();
-  
-      this.alerta.felicidades('Has completado tu rutina, sigue asi!');
-      this.rutinaIniciada = false;
-      this.entrenamientoActual = [];
+
+      await GuardarDocumentos.commit();
+      this.manejarRutinaCompletada();
+
     } catch (error) {
-      console.log('Error al finalizar rutina', error);
+      console.error('Error al finalizar rutina:', error);
       this.alerta.error('Hubo un error al finalizar la rutina');
     }
-  
+
     this.guardandoEntrenamiento = false;
+  }
+
+  crearRegistroHistorial(ejercicioEntrenamiento: any): HistorialEjercicio {
+    const volumenTotal = this.calcularVolumenEjercicio(ejercicioEntrenamiento.series);
+    const seriesFormato = ejercicioEntrenamiento.series.map((serie: any) => ({ 
+      peso: serie.peso, 
+      repeticiones: serie.repeticiones 
+    }));
+
+    return {
+      id: '',
+      fecha: Timestamp.now(),
+      rutinaId: this.rutinaSeleccionada.id,
+      rutinaNombre: this.rutinaSeleccionada.nombre,
+      ejercicioId: ejercicioEntrenamiento.ejercicioId,
+      ejercicioNombre: ejercicioEntrenamiento.nombre,
+      series: seriesFormato,
+      volumen: volumenTotal
+    };
+  }
+
+  calcularVolumenEjercicio(series: any[]): number {
+    return series.reduce((volumenTotal, serie) => 
+      volumenTotal + (serie.peso * serie.repeticiones), 0
+    );
+  }
+
+  manejarRutinaCompletada() {
+    this.alerta.felicidades('Has completado tu rutina, ¡sigue así!');
+    this.rutinaIniciada = false;
+    this.entrenamientoActual = [];
   }
 
   async agregarEjercicioRutina() {
@@ -351,18 +382,18 @@ export class RutinasComponent {
     try {
       const ejerciciosRutinaCollection = collection(this.firestore, 'Rutina', this.rutinaSeleccionada.id, 'Ejercicio-Rutina');
 
-      const res = await addDoc(ejerciciosRutinaCollection, {
+      const rutina = await addDoc(ejerciciosRutinaCollection, {
         ejercicioId: this.nuevoEjercicioRutina.ejercicioId,
         notas: this.nuevoEjercicioRutina.notas || 'ninguna',
-        orden: Number(this.nuevoEjercicioRutina.orden || 1),
-        repeticiones: Number(this.nuevoEjercicioRutina.repeticiones || 0),
-        series: Number(this.nuevoEjercicioRutina.series || 0),
-        tiempoDescansoSeg: Number(this.nuevoEjercicioRutina.tiempoDescansoSeg || 0)
+        orden: this.nuevoEjercicioRutina.orden || 1,
+        repeticiones: this.nuevoEjercicioRutina.repeticiones || 0,
+        series: this.nuevoEjercicioRutina.series || 0,
+        tiempoDescansoSeg: this.nuevoEjercicioRutina.tiempoDescansoSeg || 0
       });
 
-      const ejercicioRutinaDoc = doc(this.firestore, 'Rutina', this.rutinaSeleccionada.id, 'Ejercicio-Rutina', res.id);
+      const ejercicioRutinaDoc = doc(this.firestore, 'Rutina', this.rutinaSeleccionada.id, 'Ejercicio-Rutina', rutina.id);
       await updateDoc(ejercicioRutinaDoc, {
-        id: res.id
+        id: rutina.id
       });
 
       this.alerta.exito('Ejercicio agregado a la rutina exitosamente');
@@ -377,7 +408,7 @@ export class RutinasComponent {
   }
 
   obtenerNombreEjercicio(ejercicioId: string) {
-    const ejercicio = this.ejerciciosCatalogo.find((item) => item.id === ejercicioId);
+    const ejercicio = this.ejerciciosCatalogo.find((Ejercicio) => Ejercicio.id === ejercicioId);
     return ejercicio ? ejercicio.nombre : ejercicioId;
   }
 

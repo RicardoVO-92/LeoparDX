@@ -73,7 +73,7 @@ export class AgendarCitasComponent {
       this.citas = data.map(cita => ({
         ...cita,
         fechaHora: (cita.fechaHora as Timestamp).toDate()
-      })).sort((a, b) => a.fechaHora.getTime() - b.fechaHora.getTime());
+      })).sort((cita1, cita2) => cita1.fechaHora.getTime() - cita2.fechaHora.getTime());
       this.cargandoCitas = false;
     }, (error: any) => {
       console.error('Error al obtener citas:', error);
@@ -105,7 +105,7 @@ export class AgendarCitasComponent {
     }
   }
 
-  async agendarCita() {
+  agendarCita() {
     if (!this.nuevaCita.fecha || !this.nuevaCita.hora) {
       this.alerta.error('Debes seleccionar un dia y una hora');
       return;
@@ -119,14 +119,14 @@ export class AgendarCitasComponent {
       const fecha = new Date(this.nuevaCita.fecha);
       fecha.setHours(parseInt(horas, 10), parseInt(minutos, 10), 0, 0);
 
-      const esValida = await this.validarCita(fecha);
+      const esValida = this.validarCita(fecha);
       if (!esValida) {
         this.guardandoCita = false;
         return;
       }
 
       const citasCollection = collection(this.firestore, 'Cita');
-      await addDoc(citasCollection, {
+      addDoc(citasCollection, {
         alumnoId: this.usuario.uid,
         fechaHora: Timestamp.fromDate(fecha),
         estado: 'confirmada',
@@ -147,9 +147,7 @@ export class AgendarCitasComponent {
   async validarCita(fecha: Date): Promise<boolean> {
     const yaAgendadaEnDia = this.citas.some(cita => {
       const citaFecha = cita.fechaHora;
-      return citaFecha.getFullYear() === fecha.getFullYear() &&
-             citaFecha.getMonth() === fecha.getMonth() &&
-             citaFecha.getDate() === fecha.getDate();
+      return citaFecha.getFullYear() === fecha.getFullYear() && citaFecha.getMonth() === fecha.getMonth() && citaFecha.getDate() === fecha.getDate();
     });
 
     if (yaAgendadaEnDia) {
@@ -158,7 +156,7 @@ export class AgendarCitasComponent {
     }
 
     const citasEnHorarioCollection = collection(this.firestore, 'Cita');
-    const [horaInicio] = this.nuevaCita.hora.split('-');
+    const horaInicio = this.nuevaCita.hora.split('-');
     const [horas, minutos] = horaInicio.split(':');
     const fechaInicio = new Date(fecha);
     fechaInicio.setHours(parseInt(horas, 10), parseInt(minutos, 10), 0, 0);
@@ -170,12 +168,11 @@ export class AgendarCitasComponent {
       where('fechaHora', '<', Timestamp.fromDate(fechaFin))
     );
 
-    const snapshot = await getDocs(q);
-    if (snapshot.size >= this.limitePorHorario) {
+    const data = await getDocs(q);
+    if (data.size >= this.limitePorHorario) {
       this.alerta.info('El horario seleccionado ya esta lleno');
       return false;
     }
-
     return true;
   }
 
@@ -184,7 +181,6 @@ export class AgendarCitasComponent {
     if (!confirmado) {
       return;
     }
-
     try {
       const citaDoc = doc(this.firestore, 'Cita', id);
       await deleteDoc(citaDoc);

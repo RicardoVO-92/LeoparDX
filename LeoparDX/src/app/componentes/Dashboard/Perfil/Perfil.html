@@ -13,57 +13,6 @@
   </div>
 
   <div class="perfil-body">
-    <div class="card perfil-card perfil-metricas">
-      <div class="card-header">
-        <h3 class="card-title">Métricas de progreso</h3>
-      </div>
-      <div class="card-body">
-        <p *ngIf="cargandoMetricas" class="perfil__mensaje">Calculando tus métricas...</p>
-        <div *ngIf="!cargandoMetricas && semanaMetricas.length === 0" class="perfil__sin-datos">
-          <p>Aún no tienes registros de entrenamiento para ver tu progreso.</p>
-        </div>
-
-        <div *ngIf="!cargandoMetricas && semanaMetricas.length > 0" class="metricas-grid">
-          <div class="metrica-card metrica-card--destacada">
-            <span class="metrica-tag">Progreso semanal</span>
-            <div class="metrica-valor">{{ progresoSemanal }}%</div>
-            <p class="metrica-texto">{{ progresoSemanal >= 100 ? 'Superaste tu meta semanal' : 'Vas en camino a tu meta semanal' }}</p>
-            <div class="barra-progreso">
-              <span [style.width.%]="progresoSemanal"></span>
-            </div>
-            <p class="metrica-detalle">{{ volumenSemanal }} pts de volumen · meta {{ metaSemanal }}</p>
-          </div>
-
-          <div class="metrica-card">
-            <span class="metrica-tag">Peso máximo</span>
-            <div class="metrica-valor">{{ pesoMaximoLevantado }} kg</div>
-            <p class="metrica-texto">Tu mayor carga registrada hasta ahora.</p>
-          </div>
-
-          <div class="metrica-card">
-            <span class="metrica-tag">Ejercicio en mejora</span>
-            <div class="metrica-valor">{{ mejorEjercicio?.nombre || 'Sin datos' }}</div>
-            <p class="metrica-texto">{{ mejorEjercicio?.detalle || 'Completa más sesiones para ver mejoras.' }}</p>
-          </div>
-        </div>
-
-        <div *ngIf="!cargandoMetricas && semanaMetricas.length > 0" class="grafica-wrapper">
-          <div class="grafica-header">
-            <h4>Tu semana</h4>
-            <span>{{ volumenSemanal }} pts</span>
-          </div>
-          <div class="grafica-barras">
-            <div class="grafica-bar" *ngFor="let item of semanaMetricas">
-              <div class="barra-base">
-                <div class="barra-llena" [style.height.%]="item.altura"></div>
-              </div>
-              <span class="grafica-etiqueta">{{ item.etiqueta }}</span>
-              <small>{{ item.valor }}</small>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <div class="card perfil-card">
       <div class="card-header">
